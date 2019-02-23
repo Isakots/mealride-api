@@ -1,6 +1,7 @@
 package hu.student.projlab.mealride_api.restaurant;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import hu.student.projlab.mealride_api.meal.Meal;
 import hu.student.projlab.mealride_api.order.Order;
 import hu.student.projlab.mealride_api.user.User;
@@ -34,6 +35,7 @@ public class Restaurant {
     @Column(name = "MEAL_ID")
     private List<Meal> menu;
 
+    @JsonIgnore
     @OneToMany
     @JoinTable(name = "RESTAURANT_WORKERS",
             joinColumns = {@JoinColumn(name = "RESTAURANT_ID")},
@@ -41,6 +43,7 @@ public class Restaurant {
     @Column(name = "WORKER_ID")
     private List<User> workers;
 
+    @JsonIgnore
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinTable(name="RESTAURANT_ORDERS", joinColumns = { @JoinColumn(name="RESTAURANT_ID")},
             inverseJoinColumns = { @JoinColumn(name="ORDER_ID")})
