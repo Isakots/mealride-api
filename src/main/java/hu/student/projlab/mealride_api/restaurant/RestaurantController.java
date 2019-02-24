@@ -10,7 +10,7 @@ import static org.springframework.http.HttpStatus.BAD_REQUEST;
 
 
 @RestController
-@RequestMapping(value = "/restaurant")
+@RequestMapping(value = "/restaurants")
 class RestaurantController {
 
     private RestaurantService restaurantService;
@@ -31,21 +31,21 @@ class RestaurantController {
     }
 
     @PostMapping
-    public ResponseEntity<Object> addRestaurant(@RequestHeader String token,
+    public ResponseEntity<Object> addRestaurant(@RequestHeader(required = false) String token,
                                                 @RequestBody Restaurant restaurant) {
 
         return ResponseEntity.badRequest().body(BAD_REQUEST);
     }
 
     @PutMapping
-    public ResponseEntity<Object> modifyRestaurants(@RequestHeader String token,
+    public ResponseEntity<Object> modifyRestaurant(@RequestHeader(required = false) String token,
                                                     @RequestBody Restaurant restaurant) {
 
         return ResponseEntity.badRequest().body(BAD_REQUEST);
     }
 
     @DeleteMapping
-    public ResponseEntity<Object> deleteRestaurants(@RequestHeader String token,
+    public ResponseEntity<Object> deleteRestaurant(@RequestHeader(required = false) String token,
                                                     @RequestBody Restaurant restaurant) {
 
         return ResponseEntity.badRequest().body(BAD_REQUEST);

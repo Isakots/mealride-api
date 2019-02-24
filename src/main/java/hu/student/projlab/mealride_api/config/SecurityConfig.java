@@ -2,6 +2,7 @@ package hu.student.projlab.mealride_api.config;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -17,6 +18,12 @@ import javax.sql.DataSource;
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
+
+    @Value("${username.query}")
+    private String usernameQuery;
+
+    @Value("${password.query}")
+    private String pwQuery;
 
     @Autowired
     private DataSource dataSource;
@@ -39,8 +46,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .passwordEncoder(passwordEncoder())
                 .and()
                 .jdbcAuthentication()
-                .usersByUsernameQuery("select email,password from user where email=?")
-                .authoritiesByUsernameQuery("select u.email, r.role_name from user u inner join user_roles ur on(u.user_id=ur.user_id) inner join role r on(ur.role_id=r.role_id) where u.email=?")
+                .usersByUsernameQuery(usernameQuery)
+                .authoritiesByUsernameQuery(pwQuery)
                 .dataSource(dataSource);
     }
 
@@ -48,6 +55,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
+                .csrf().disable()
                 .authorizeRequests()
                 .antMatchers("/*").permitAll();
                 /*.httpBasic()
@@ -82,4 +90,3 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
      }
 
 }
-

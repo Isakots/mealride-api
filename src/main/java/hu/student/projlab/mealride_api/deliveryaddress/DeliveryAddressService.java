@@ -5,6 +5,8 @@ import hu.student.projlab.mealride_api.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class DeliveryAddressService {
 
@@ -18,6 +20,12 @@ public class DeliveryAddressService {
         this.userService = userService;
     }
 
+    List<DeliveryAddress> findAll() {
+        return deliveryAddressRepository.findAll();
+    }
 
+    void addAddress(DeliveryAddress address) {
+        deliveryAddressRepository.save(address);
+    }
 
 }

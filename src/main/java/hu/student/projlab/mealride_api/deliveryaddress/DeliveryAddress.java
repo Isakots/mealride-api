@@ -1,9 +1,14 @@
 package hu.student.projlab.mealride_api.deliveryaddress;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import hu.student.projlab.mealride_api.converter.LocalDateTimeAttributeConverter;
 import hu.student.projlab.mealride_api.user.User;
 
 import javax.persistence.*;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
+import java.sql.Timestamp;
 
 @Entity
 @Table(name="ADDRESS")
@@ -12,24 +17,44 @@ public class DeliveryAddress {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+
+    @Pattern(regexp="[0-9]{4}")
     @Column(name="ZIP")
-    private Short zipcode;
+    private String zipcode;
+
+    @Size(max=31)
     @Column(name="CITY")
     private String city;
+
+    @Size(max=63)
     @Column(name="STREET")
     private String street;
+
+    @Size(max=31)
     @Column(name="STATE")
     private String state;
+
+    @Max(999)
     @Column(name="HOUSE_NUMBER")
     private Short housenumber;
+
+    @Max(100)
     @Column(name="FLOOR")
     private Short floor;
+
+    @Max(9999)
     @Column(name="DOOR")
     private Short door;
-    @Column(name="CREATED_AT")
-    private Long created_at;
-    @Column(name="DELETED_AT")
-    private Long deleted_at;
+
+    @JsonIgnore
+    @Convert(converter = LocalDateTimeAttributeConverter.class)
+    @Column(name="CREATION_DATE")
+    private Timestamp creationDate;
+
+    @JsonIgnore
+    @Convert(converter = LocalDateTimeAttributeConverter.class)
+    @Column(name="DELETION_DATE")
+    private Timestamp deletionDate;
 
     @JsonIgnore
     @ManyToOne
@@ -37,6 +62,17 @@ public class DeliveryAddress {
     private User user;
 
     public DeliveryAddress() {
+    }
+
+    public DeliveryAddress(@Pattern(regexp = "[0-9]{4}") String zipcode, @Size(max = 31) String city, @Size(max = 63) String street,
+                           @Size(max = 31) String state, @Max(999) Short housenumber, @Max(100) Short floor, @Max(9999) Short door) {
+        this.zipcode = zipcode;
+        this.city = city;
+        this.street = street;
+        this.state = state;
+        this.housenumber = housenumber;
+        this.floor = floor;
+        this.door = door;
     }
 
     public Long getId() {
@@ -47,11 +83,11 @@ public class DeliveryAddress {
         this.id = id;
     }
 
-    public Short getZipcode() {
+    public String getZipcode() {
         return zipcode;
     }
 
-    public void setZipcode(Short zipcode) {
+    public void setZipcode(String zipcode) {
         this.zipcode = zipcode;
     }
 
@@ -111,20 +147,20 @@ public class DeliveryAddress {
         this.user = user;
     }
 
-    public Long getCreated_at() {
-        return created_at;
+    public Timestamp getCreationDate() {
+        return creationDate;
     }
 
-    public void setCreated_at(Long created_at) {
-        this.created_at = created_at;
+    public void setCreationDate(Timestamp creationDate) {
+        this.creationDate = creationDate;
     }
 
-    public Long getDeleted_at() {
-        return deleted_at;
+    public Timestamp getDeletionDate() {
+        return deletionDate;
     }
 
-    public void setDeleted_at(Long deleted_at) {
-        this.deleted_at = deleted_at;
+    public void setDeletionDate(Timestamp deletionDate) {
+        this.deletionDate = deletionDate;
     }
 
     @Override
