@@ -1,4 +1,4 @@
-package hu.student.projlab.mealride_api.config;
+package hu.student.projlab.mealride_api.config.security;
 
 
 import hu.student.projlab.mealride_api.user.User;

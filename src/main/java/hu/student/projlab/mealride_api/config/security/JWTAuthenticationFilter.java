@@ -1,9 +1,8 @@
-package hu.student.projlab.mealride_api.config.jwt;
+package hu.student.projlab.mealride_api.config.security;
 
 
 import com.auth0.jwt.JWT;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import hu.student.projlab.mealride_api.config.SecurityConstants;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -25,7 +24,7 @@ import static com.auth0.jwt.algorithms.Algorithm.HMAC512;
 public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
     private AuthenticationManager authenticationManager;
 
-    public JWTAuthenticationFilter(AuthenticationManager authenticationManager) {
+    JWTAuthenticationFilter(AuthenticationManager authenticationManager) {
         this.authenticationManager = authenticationManager;
     }
 
@@ -35,8 +34,6 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         try {
             hu.student.projlab.mealride_api.user.User creds = new ObjectMapper()
                     .readValue(req.getInputStream(),hu.student.projlab.mealride_api.user.User.class);
-
-            System.out.println(creds.getEmail() + " "+ creds.getPassword());
 
             return authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
