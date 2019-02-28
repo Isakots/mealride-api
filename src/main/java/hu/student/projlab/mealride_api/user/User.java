@@ -7,6 +7,7 @@ import hu.student.projlab.mealride_api.order.Order;
 import hu.student.projlab.mealride_api.restaurant.Restaurant;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
@@ -14,7 +15,7 @@ import java.util.Set;
 
 @Entity
 @Table(name="USER")
-public class User {
+public class User implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.TABLE)
@@ -24,7 +25,7 @@ public class User {
     private String firstname;
     @Column(name="LASTNAME")
     private String lastname;
-    @JsonIgnore
+    //@JsonIgnore
     @Column(name="PASSWORD")
     private String password; //hash
     @Column(name="EMAIL")

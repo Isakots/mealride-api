@@ -22,7 +22,7 @@ public class CustomUserDetailsService implements UserDetailsService {
         if (user == null) {
             throw new UsernameNotFoundException(username);
         }
-        return new CustomUserDetails(user);
+        return new org.springframework.security.core.userdetails.User(user.getEmail(),user.getPassword(),user.getRoles());
     }
 
 

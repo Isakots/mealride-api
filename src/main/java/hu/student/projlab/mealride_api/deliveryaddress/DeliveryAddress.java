@@ -18,31 +18,31 @@ public class DeliveryAddress {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Pattern(regexp="[0-9]{4}")
+    @Pattern(regexp="[0-9]{4}", message="ZipCode format is not correct!")
     @Column(name="ZIP")
     private String zipcode;
 
-    @Size(max=31)
+    @Size(max=31, message="Length must be less than 32!")
     @Column(name="CITY")
     private String city;
 
-    @Size(max=63)
+    @Size(max=63, message="Length must be less than 64!")
     @Column(name="STREET")
     private String street;
 
-    @Size(max=31)
+    @Size(max=31, message="Length must be less than 32!")
     @Column(name="STATE")
     private String state;
 
-    @Max(999)
+    @Max(value=999, message="House number has to be less than 999!")
     @Column(name="HOUSE_NUMBER")
     private Short housenumber;
 
-    @Max(100)
+    @Max(value=100, message="Floor number has to be less than 100")
     @Column(name="FLOOR")
     private Short floor;
 
-    @Max(9999)
+    @Max(value=9999, message="Door number has to be less than 9999")
     @Column(name="DOOR")
     private Short door;
 

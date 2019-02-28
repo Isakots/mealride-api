@@ -39,6 +39,10 @@ class DeliveryAddressController {
                                              @RequestBody @Valid DeliveryAddress address,
                                              BindingResult result) {
 
+        if(result.hasErrors()) {
+            return ResponseEntity.badRequest().body(result.getAllErrors());
+        }
+
         try {
             deliveryAddressService.addAddress(address);
             return ResponseEntity.ok(address);
