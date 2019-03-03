@@ -2,25 +2,35 @@ package hu.student.projlab.mealride_api.creditcard;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import hu.student.projlab.mealride_api.converter.LocalDateTimeAttributeConverter;
 import hu.student.projlab.mealride_api.user.User;
+import hu.student.projlab.mealride_api.util.AbstractEntity;
 
 import javax.persistence.*;
+import javax.validation.constraints.Future;
+import javax.validation.constraints.Pattern;
+import java.time.LocalDateTime;
+import java.util.Date;
 
 @Entity
 @Table(name="CARD")
-public class CreditCard {
+public class CreditCard extends AbstractEntity {
 
     @Id
-    private Long number;
+    @GeneratedValue
+    private Long id;
 
-    @JsonIgnore
+    @Pattern(regexp="[0-9]{16}", message="Car number format is not correct!")
+    @Column(name="CARD_NUMBER")
+    private String number;
+
     @Column(name="OWNER_NAME")
     private String ownername;
 
+    @Future
     @Column(name="EXPIRATION_DATE")
-    private Long expriationdate;
+    private Date expriationdate;
 
-    @JsonIgnore
     @Column(name="CVC")
     private String cvc; // hashed
 
@@ -29,29 +39,30 @@ public class CreditCard {
     @JoinColumn(name="USER_ID")
     private User user;
 
-    @Column(name="CREATED_AT")
-    private Long created_at;
-    @Column(name="DELETED_AT")
-    private Long deleted_at;
-
     public CreditCard() {
     }
 
-    public CreditCard(Long number, String ownername, Long expriationdate, String cvc, User user, Long created_at, Long deleted_at) {
+    public CreditCard(@Pattern(regexp = "[0-9]{16}", message = "Car number format is not correct!") String number,
+                      String ownername, @Future Date expriationdate, String cvc) {
         this.number = number;
         this.ownername = ownername;
         this.expriationdate = expriationdate;
         this.cvc = cvc;
-        this.user = user;
-        this.created_at = created_at;
-        this.deleted_at = deleted_at;
     }
 
-    public Long getNumber() {
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getNumber() {
         return number;
     }
 
-    public void setNumber(Long number) {
+    public void setNumber(String number) {
         this.number = number;
     }
 
@@ -63,11 +74,11 @@ public class CreditCard {
         this.ownername = ownername;
     }
 
-    public Long getExpriationdate() {
+    public Date getExpriationdate() {
         return expriationdate;
     }
 
-    public void setExpriationdate(Long expriationdate) {
+    public void setExpriationdate(Date expriationdate) {
         this.expriationdate = expriationdate;
     }
 
@@ -87,19 +98,4 @@ public class CreditCard {
         this.user = user;
     }
 
-    public Long getCreated_at() {
-        return created_at;
-    }
-
-    public void setCreated_at(Long created_at) {
-        this.created_at = created_at;
-    }
-
-    public Long getDeleted_at() {
-        return deleted_at;
-    }
-
-    public void setDeleted_at(Long deleted_at) {
-        this.deleted_at = deleted_at;
-    }
 }

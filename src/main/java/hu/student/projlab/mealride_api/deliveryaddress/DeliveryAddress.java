@@ -1,18 +1,17 @@
 package hu.student.projlab.mealride_api.deliveryaddress;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import hu.student.projlab.mealride_api.converter.LocalDateTimeAttributeConverter;
 import hu.student.projlab.mealride_api.user.User;
+import hu.student.projlab.mealride_api.util.AbstractEntity;
 
 import javax.persistence.*;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
-import java.sql.Timestamp;
 
 @Entity
 @Table(name="ADDRESS")
-public class DeliveryAddress {
+public class DeliveryAddress extends AbstractEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -47,21 +46,12 @@ public class DeliveryAddress {
     private Short door;
 
     @JsonIgnore
-    @Convert(converter = LocalDateTimeAttributeConverter.class)
-    @Column(name="CREATION_DATE")
-    private Timestamp creationDate;
-
-    @JsonIgnore
-    @Convert(converter = LocalDateTimeAttributeConverter.class)
-    @Column(name="DELETION_DATE")
-    private Timestamp deletionDate;
-
-    @JsonIgnore
     @ManyToOne
     @JoinColumn(name="USER_ID")
     private User user;
 
     public DeliveryAddress() {
+
     }
 
     public DeliveryAddress(@Pattern(regexp = "[0-9]{4}") String zipcode, @Size(max = 31) String city, @Size(max = 63) String street,
@@ -145,22 +135,6 @@ public class DeliveryAddress {
 
     public void setUser(User user) {
         this.user = user;
-    }
-
-    public Timestamp getCreationDate() {
-        return creationDate;
-    }
-
-    public void setCreationDate(Timestamp creationDate) {
-        this.creationDate = creationDate;
-    }
-
-    public Timestamp getDeletionDate() {
-        return deletionDate;
-    }
-
-    public void setDeletionDate(Timestamp deletionDate) {
-        this.deletionDate = deletionDate;
     }
 
     @Override

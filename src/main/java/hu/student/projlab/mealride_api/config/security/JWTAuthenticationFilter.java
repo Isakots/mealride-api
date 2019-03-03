@@ -3,6 +3,10 @@ package hu.student.projlab.mealride_api.config.security;
 
 import com.auth0.jwt.JWT;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import hu.student.projlab.mealride_api.config.RoleRepository;
+import hu.student.projlab.mealride_api.user.UserRepository;
+import hu.student.projlab.mealride_api.user.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -22,6 +26,7 @@ import static com.auth0.jwt.algorithms.Algorithm.HMAC512;
 
 
 public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
+
     private AuthenticationManager authenticationManager;
 
     JWTAuthenticationFilter(AuthenticationManager authenticationManager) {
@@ -32,12 +37,12 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     public Authentication attemptAuthentication(HttpServletRequest req,
                                                 HttpServletResponse res) throws AuthenticationException {
         try {
-            hu.student.projlab.mealride_api.user.User creds = new ObjectMapper()
-                    .readValue(req.getInputStream(),hu.student.projlab.mealride_api.user.User.class);
+            hu.student.projlab.mealride_api.user.UserDTO creds = new ObjectMapper()
+                    .readValue(req.getInputStream(),hu.student.projlab.mealride_api.user.UserDTO.class);
 
             return authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
-                            creds.getEmail(),
+                            creds.getUsername(),
                             creds.getPassword(),
                             new ArrayList<>())
             );

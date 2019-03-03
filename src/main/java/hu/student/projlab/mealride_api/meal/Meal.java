@@ -1,10 +1,12 @@
 package hu.student.projlab.mealride_api.meal;
 
+import hu.student.projlab.mealride_api.util.AbstractEntity;
+
 import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
-public class Meal {
+public class Meal extends AbstractEntity {
 
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)

@@ -6,12 +6,14 @@ import hu.student.projlab.mealride_api.creditcard.CreditCard;
 import hu.student.projlab.mealride_api.deliveryaddress.DeliveryAddress;
 import hu.student.projlab.mealride_api.restaurant.Restaurant;
 import hu.student.projlab.mealride_api.user.User;
+import hu.student.projlab.mealride_api.util.AbstractEntity;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name="ORDERS")
-public class Order {
+public class Order extends AbstractEntity{
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -30,10 +32,10 @@ public class Order {
             inverseJoinColumns = { @JoinColumn(name="RESTAURANT_ID")})
     private Restaurant restaurant;
 
-   /* @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL)
     @JoinTable(name="ORDER_MEALS", joinColumns = { @JoinColumn(name="ORDER_ID")},
             inverseJoinColumns = { @JoinColumn(name="CARTITEM_ID")})
-    private List<CartItem> meals;*/
+    private List<CartItem> meals;
 
     @OneToOne
     @JoinColumn(name="ADDRESS_ID")
@@ -51,7 +53,8 @@ public class Order {
     private String usercomment;
     @Column(name="WORKER_COMMENT")
     private String restaurantcomment;
-   // private State state;  // enum type State
+    @Column(name="STATUS")
+    private Status status;  // enum type State
 
 
     public Order() {
@@ -81,13 +84,13 @@ public class Order {
         this.restaurant = restaurant;
     }
 
-    /*public List<CartItem> getMeals() {
+    public List<CartItem> getMeals() {
         return meals;
     }
 
     public void setMeals(List<CartItem> meals) {
         this.meals = meals;
-    }*/
+    }
 
     public DeliveryAddress getAddress() {
         return address;
@@ -146,4 +149,11 @@ public class Order {
         this.restaurantcomment = restaurantcomment;
     }
 
+    public Status getStatus() {
+        return status;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
+    }
 }

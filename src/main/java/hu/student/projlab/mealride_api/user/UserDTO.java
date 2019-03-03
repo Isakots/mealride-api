@@ -1,9 +1,12 @@
 package hu.student.projlab.mealride_api.user;
 
+import javax.validation.constraints.Min;
+
 public class UserDTO {
 
     private String username;
 
+    @Min(8)
     private String password;
 
     public UserDTO() {

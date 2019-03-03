@@ -25,7 +25,7 @@ public class User implements Serializable {
     private String firstname;
     @Column(name="LASTNAME")
     private String lastname;
-    //@JsonIgnore
+    @JsonIgnore
     @Column(name="PASSWORD")
     private String password; //hash
     @Column(name="EMAIL")

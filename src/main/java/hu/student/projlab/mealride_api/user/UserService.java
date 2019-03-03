@@ -23,6 +23,18 @@ public class UserService {
         this.roleRepository = roleRepository;
     }
 
+    /**
+     * Note: This is a bad solution. I cant store yet the authorities of a User in SecurityContext so
+     * I implement this function as a temporary solution to let me move on.
+     *
+     * @return the database User of the current login
+     */
+    public User getCurrentUser(String email) {
+        return userRepository.findByEmail(email);
+    }
+
+
+
 
 
 }
