@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 
 @Service
 public class UserService {
@@ -29,8 +31,15 @@ public class UserService {
      *
      * @return the database User of the current login
      */
-    public User getCurrentUser(String email) {
-        return userRepository.findByEmail(email);
+    public User getCurrentUser(Optional<String> email) {
+        if(!email.isPresent())
+            return null;
+        else {
+            Optional<User> user = userRepository.findByEmail(email.get());
+            if (user.isPresent())
+                return user.get();
+            else return null;
+        }
     }
 
 

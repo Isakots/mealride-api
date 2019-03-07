@@ -1,17 +1,24 @@
 package hu.student.projlab.mealride_api.creditcard;
 
+import javax.validation.constraints.Pattern;
+
 public class CreditCardForm {
 
-    private Long number;
+    private Long id;
+    @Pattern(regexp="[0-9]{16}", message="Car number format is not correct!")
+    private String number;
     private String ownername;
-    private String expriationmonth;
-    private String expriationyear;
+    private int expriationmonth;
+    private int expriationyear;
     private String cvc; // hashed
 
     public CreditCardForm() {
+
     }
 
-    public CreditCardForm(Long number, String ownername, String expriationmonth, String expriationyear, String cvc) {
+    public CreditCardForm(Long id, @Pattern(regexp = "[0-9]{16}", message = "Car number format is not correct!") String number,
+                          String ownername, int expriationmonth, int expriationyear, String cvc) {
+        this.id = id;
         this.number = number;
         this.ownername = ownername;
         this.expriationmonth = expriationmonth;
@@ -19,11 +26,27 @@ public class CreditCardForm {
         this.cvc = cvc;
     }
 
-    public Long getNumber() {
+    CreditCardForm(CreditCard card) {
+        this.id = card.getId();
+        this.number = card.getNumber();
+        this.ownername = card.getOwnername();
+        this.expriationmonth = card.getExpriationdate().getMonthValue();
+        this.expriationyear = card.getExpriationdate().getYear();
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getNumber() {
         return number;
     }
 
-    public void setNumber(Long number) {
+    public void setNumber(String number) {
         this.number = number;
     }
 
@@ -35,19 +58,19 @@ public class CreditCardForm {
         this.ownername = ownername;
     }
 
-    public String getExpriationmonth() {
+    public int getExpriationmonth() {
         return expriationmonth;
     }
 
-    public void setExpriationmonth(String expriationmonth) {
+    public void setExpriationmonth(int expriationmonth) {
         this.expriationmonth = expriationmonth;
     }
 
-    public String getExpriationyear() {
+    public int getExpriationyear() {
         return expriationyear;
     }
 
-    public void setExpriationyear(String expriationyear) {
+    public void setExpriationyear(int expriationyear) {
         this.expriationyear = expriationyear;
     }
 

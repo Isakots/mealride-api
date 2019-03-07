@@ -2,15 +2,13 @@ package hu.student.projlab.mealride_api.creditcard;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import hu.student.projlab.mealride_api.converter.LocalDateTimeAttributeConverter;
+import hu.student.projlab.mealride_api.converter.LocalDateAttributeConverter;
 import hu.student.projlab.mealride_api.user.User;
 import hu.student.projlab.mealride_api.util.AbstractEntity;
 
 import javax.persistence.*;
-import javax.validation.constraints.Future;
 import javax.validation.constraints.Pattern;
-import java.time.LocalDateTime;
-import java.util.Date;
+import java.time.LocalDate;
 
 @Entity
 @Table(name="CARD")
@@ -20,6 +18,7 @@ public class CreditCard extends AbstractEntity {
     @GeneratedValue
     private Long id;
 
+    @JsonIgnore
     @Pattern(regexp="[0-9]{16}", message="Car number format is not correct!")
     @Column(name="CARD_NUMBER")
     private String number;
@@ -27,10 +26,11 @@ public class CreditCard extends AbstractEntity {
     @Column(name="OWNER_NAME")
     private String ownername;
 
-    @Future
+    @Convert(converter = LocalDateAttributeConverter.class)
     @Column(name="EXPIRATION_DATE")
-    private Date expriationdate;
+    private LocalDate expriationdate;
 
+    @JsonIgnore
     @Column(name="CVC")
     private String cvc; // hashed
 
@@ -40,14 +40,6 @@ public class CreditCard extends AbstractEntity {
     private User user;
 
     public CreditCard() {
-    }
-
-    public CreditCard(@Pattern(regexp = "[0-9]{16}", message = "Car number format is not correct!") String number,
-                      String ownername, @Future Date expriationdate, String cvc) {
-        this.number = number;
-        this.ownername = ownername;
-        this.expriationdate = expriationdate;
-        this.cvc = cvc;
     }
 
     public Long getId() {
@@ -74,11 +66,11 @@ public class CreditCard extends AbstractEntity {
         this.ownername = ownername;
     }
 
-    public Date getExpriationdate() {
+    public LocalDate getExpriationdate() {
         return expriationdate;
     }
 
-    public void setExpriationdate(Date expriationdate) {
+    public void setExpriationdate(LocalDate expriationdate) {
         this.expriationdate = expriationdate;
     }
 
