@@ -1,8 +1,5 @@
 package hu.student.projlab.mealride_api.config.security;
 
-import hu.student.projlab.mealride_api.user.User;
-import hu.student.projlab.mealride_api.user.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
