@@ -1,13 +1,17 @@
 package hu.student.projlab.mealride_api.web;
 
-import hu.student.projlab.mealride_api.domain.CreditCard;
 import hu.student.projlab.mealride_api.service.CreditCardService;
+import hu.student.projlab.mealride_api.service.dto.CreditCardDTO;
 import hu.student.projlab.mealride_api.util.EndpointConstants;
+import hu.student.projlab.mealride_api.util.HeaderUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import static org.springframework.http.HttpStatus.BAD_REQUEST;
+import javax.validation.Valid;
+import java.net.URI;
+import java.util.List;
 
 
 @RestController
@@ -22,28 +26,55 @@ class CreditCardController {
     }
 
     @GetMapping
-    public ResponseEntity<Object> getCards() {
+    public ResponseEntity<List<CreditCardDTO>> getCards() {
 
-        return ResponseEntity.badRequest().body(BAD_REQUEST);
+        List<CreditCardDTO> result = creditCardService.findAll();
+
+        return new ResponseEntity<>(
+                result, null, HttpStatus.OK);
+
     }
 
     @PostMapping
-    public ResponseEntity<Object> addCard( @RequestBody CreditCard creditCard) {
+    public ResponseEntity<CreditCardDTO> addCard(
+            @RequestBody @Valid CreditCardDTO creditCard) throws Exception {
 
-        return ResponseEntity.badRequest().body(BAD_REQUEST);
+        if(creditCard.getId() != null)
+            throw new Exception();
+        // TODO: Create an exceptionhandler class and an Exception type for this.
+
+        CreditCardDTO newCard = creditCardService.addCard(creditCard);
+        return ResponseEntity.created(new URI("/" + newCard.getId()))
+                .headers(HeaderUtil.createEntityCreationAlert(
+                        "Credit Card", newCard.getId().toString()))
+                .body(newCard);
     }
 
     @PutMapping
-    public ResponseEntity<Object> modifyCard(@RequestBody CreditCard creditCard) {
+    public ResponseEntity<CreditCardDTO> updateCard(
+            @RequestBody @Valid CreditCardDTO creditCard) {
 
-        return ResponseEntity.badRequest().body(BAD_REQUEST);
+        if(creditCard.getId() == null)
+            return ResponseEntity.notFound()
+                    .headers(HeaderUtil.createAlert(
+                            "Credit Card not found",null))
+                    .build();
+
+        CreditCardDTO result = creditCardService.updateCard(creditCard);
+        return ResponseEntity.ok()
+                .headers(HeaderUtil.createEntityUpdateAlert(
+                        "Credit Card", result.getId().toString()))
+                .body(result);
     }
 
-    @DeleteMapping
-    public ResponseEntity<Object> deleteCard(@RequestBody CreditCard creditCard) {
-
-        return ResponseEntity.badRequest().body(BAD_REQUEST);
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteCard(@PathVariable Long id) {
+        creditCardService.deleteCard(id);
+        return ResponseEntity
+                .ok()
+                .headers(HeaderUtil.createEntityDeletionAlert(
+                        "Credit Card", id.toString()))
+                .build();
     }
-
 
 }

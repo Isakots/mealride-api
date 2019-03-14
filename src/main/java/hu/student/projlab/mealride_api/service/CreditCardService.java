@@ -2,19 +2,19 @@ package hu.student.projlab.mealride_api.service;
 
 import hu.student.projlab.mealride_api.config.security.SecurityUtils;
 import hu.student.projlab.mealride_api.domain.CreditCard;
-import hu.student.projlab.mealride_api.domain.User;
 import hu.student.projlab.mealride_api.repository.CreditCardRepository;
 import hu.student.projlab.mealride_api.service.dto.CreditCardDTO;
 import hu.student.projlab.mealride_api.service.mapper.CreditCardMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
+import javax.transaction.Transactional;
+import java.time.LocalDateTime;
 import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Optional;
 
 @Service
+@Transactional
 public class CreditCardService {
 
     private CreditCardRepository creditCardRepository;
@@ -30,41 +30,66 @@ public class CreditCardService {
         this.userService = userService;
     }
 
-    List<CreditCardDTO> findAll() {
-        if(userService.getCurrentUser(SecurityUtils.getCurrentUserLogin()) == null)
-            throw new NoSuchElementException("User is not found");
+    public List<CreditCardDTO> findAll() {
 
-        Optional<List<CreditCard>> cardList =
-                creditCardRepository.findAllByUserId(userService.getCurrentUser(SecurityUtils.getCurrentUserLogin()).getId());
-        if(cardList.isPresent())
-            return mapper.creditCardListTocreditCardFormList(cardList.get());
+        return mapper
+                .creditCardListTocreditCardDTOList(
+                        creditCardRepository.findAllByUserId(
+                             userService
+                                .getCurrentUser(SecurityUtils.getCurrentUserLogin())
+                                .getId()).get());
 
-        return Collections.emptyList();
-    }
-
-    void addAddress(CreditCardDTO card) throws NoSuchElementException{
-        try {
-            User user = userService.getCurrentUser(SecurityUtils.getCurrentUserLogin());
-        }
-        catch(NoSuchElementException e) {
-            throw new NoSuchElementException();
-        }
-    }
-
-    void updateAddress(CreditCardDTO card) {
-        try {
-
-        }
-        catch(Exception e) {
-
-        }
-    }
-
-    void deleteAddress(CreditCardDTO card) {
+        // TODO NoSuchElementException-Handler (for controller class)
 
     }
 
+    /**
+     * Save credit card.
+     *
+     * @param cardDTO Credit card which needs to be persisted.
+     * @return The new credit card with generated ID
+     */
+    public CreditCardDTO addCard(CreditCardDTO cardDTO) {
+        CreditCard card = mapper.creditCardDTOTocreditCard(cardDTO);
+        card.setUser(userService.getCurrentUser(SecurityUtils.getCurrentUserLogin()));
+        card.setCreationDate(LocalDateTime.now());
+        return mapper.creditCardTocreditCardDTO(creditCardRepository.save(card));
+    }
+
+    /**
+     * Update credit card.
+     *
+     * @param cardDTO Credit card which needs to be updated.
+     * @return The credit card with updated values
+     */
+    public CreditCardDTO updateCard(CreditCardDTO cardDTO) {
+
+        List<CreditCard> userCards =
+                creditCardRepository.findAllByUserId(
+                        userService
+                                .getCurrentUser(SecurityUtils.getCurrentUserLogin())
+                                .getId()).get();
 
 
+        if(!userCards.contains(mapper.creditCardDTOTocreditCard(cardDTO)))
+            throw new AccessDeniedException("It is not your address");
+
+        return mapper
+                .creditCardTocreditCardDTO(
+                        creditCardRepository.save(
+                                mapper.creditCardDTOTocreditCard(cardDTO)));
+    }
+
+    /**
+     * Deletes the relation to User.
+     *
+     * @param id ID of the credit card
+     */
+    public void deleteCard(Long id) {
+        CreditCard card = creditCardRepository.findById(id).get();
+        card.setUser(null);
+        card.setDeletionDate(LocalDateTime.now());
+        creditCardRepository.save(card);
+    }
 
 }

@@ -21,7 +21,7 @@ public class CreditCardMapper {
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
     }
 
-    public CreditCard creditCardFormTocreditCard(CreditCardDTO cardDTO) {
+    public CreditCard creditCardDTOTocreditCard(CreditCardDTO cardDTO) {
         if(cardDTO == null)
             return null;
         else {
@@ -35,7 +35,7 @@ public class CreditCardMapper {
         }
     }
 
-    public CreditCardDTO creditCardTocreditCardForm(CreditCard card) {
+    public CreditCardDTO creditCardTocreditCardDTO(CreditCard card) {
         if(card == null)
             return null;
         else {
@@ -44,10 +44,17 @@ public class CreditCardMapper {
         }
     }
 
-    public List<CreditCardDTO> creditCardListTocreditCardFormList(List<CreditCard> cardList) {
+    public List<CreditCardDTO> creditCardListTocreditCardDTOList(List<CreditCard> cardList) {
        return cardList.stream()
                     .filter(Objects::nonNull)
-                    .map(this::creditCardTocreditCardForm)
+                    .map(this::creditCardTocreditCardDTO)
                     .collect(Collectors.toList());
         }
+
+   public List<CreditCard> creditCardDTOListToCreditCardList(List<CreditCardDTO> cardDTOList) {
+        return cardDTOList.stream()
+                .filter(Objects::nonNull)
+                .map(this::creditCardDTOTocreditCard)
+                .collect(Collectors.toList());
+   }
 }

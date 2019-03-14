@@ -2,7 +2,6 @@ package hu.student.projlab.mealride_api.service;
 
 import hu.student.projlab.mealride_api.config.security.SecurityUtils;
 import hu.student.projlab.mealride_api.domain.DeliveryAddress;
-import hu.student.projlab.mealride_api.domain.User;
 import hu.student.projlab.mealride_api.repository.DeliveryAddressRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.AccessDeniedException;
@@ -35,27 +34,29 @@ public class DeliveryAddressService {
     /**
      * Saves address.
      *
-     * @param address The address which should be persisted
+     * @param address The address which needs to be persisted
      * @return The new address with generated ID
      */
     public DeliveryAddress addAddress(DeliveryAddress address) {
-        User user = userService.getCurrentUser(SecurityUtils.getCurrentUserLogin());
-        address.setUser(user);
+        address.setUser(userService.getCurrentUser(SecurityUtils.getCurrentUserLogin()));
         address.setCreationDate(LocalDateTime.now());
         return deliveryAddressRepository.save(address);
     }
 
     /**
-     *
      * Updates address.
      *
      * @param address Address which needs to be updated.
-     * @return The address with updates values
+     * @return The address with updated values
      */
     public DeliveryAddress updateAddress(DeliveryAddress address) {
-        User user = userService.getCurrentUser(SecurityUtils.getCurrentUserLogin());
 
-        List<DeliveryAddress> userAddresses = deliveryAddressRepository.findAllByUserId(user.getId()).get();
+        List<DeliveryAddress> userAddresses =
+                deliveryAddressRepository.findAllByUserId(
+                        userService
+                                .getCurrentUser(SecurityUtils.getCurrentUserLogin())
+                                .getId()).get();
+
         if(!userAddresses.contains(address))
             throw new AccessDeniedException("It is not your address");
 
@@ -63,7 +64,6 @@ public class DeliveryAddressService {
     }
 
     /**
-     *
      * Deletes the relation to User.
      *
      * @param id ID of the address
