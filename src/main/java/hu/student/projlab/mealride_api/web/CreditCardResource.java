@@ -16,12 +16,12 @@ import java.util.List;
 
 @RestController
 @RequestMapping(value = EndpointConstants.USER_ENDPOINT + EndpointConstants.CREDITCARD_ENDPOINT)
-class CreditCardController {
+class CreditCardResource {
 
     private CreditCardService creditCardService;
 
     @Autowired
-    public CreditCardController(CreditCardService creditCardService) {
+    public CreditCardResource(CreditCardService creditCardService) {
         this.creditCardService = creditCardService;
     }
 

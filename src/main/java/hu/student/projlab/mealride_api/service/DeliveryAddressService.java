@@ -50,16 +50,7 @@ public class DeliveryAddressService {
      * @return The address with updated values
      */
     public DeliveryAddress updateAddress(DeliveryAddress address) {
-
-        List<DeliveryAddress> userAddresses =
-                deliveryAddressRepository.findAllByUserId(
-                        userService
-                                .getCurrentUser(SecurityUtils.getCurrentUserLogin())
-                                .getId()).get();
-
-        if(!userAddresses.contains(address))
-            throw new AccessDeniedException("It is not your address");
-
+        checkIfUserHasSpecifiedAddress(address);
         return deliveryAddressRepository.save(address);
     }
 
@@ -70,9 +61,22 @@ public class DeliveryAddressService {
      */
     public void deleteAddress(Long id) {
         DeliveryAddress address = deliveryAddressRepository.findById(id).get();
+        checkIfUserHasSpecifiedAddress(address);
         address.setUser(null);
         address.setDeletionDate(LocalDateTime.now());
         deliveryAddressRepository.save(address);
     }
+
+    private void checkIfUserHasSpecifiedAddress(DeliveryAddress address) {
+        List<DeliveryAddress> userAddresses =
+                deliveryAddressRepository.findAllByUserId(
+                        userService
+                                .getCurrentUser(SecurityUtils.getCurrentUserLogin())
+                                .getId()).get();
+
+        if(!userAddresses.contains(address))
+            throw new AccessDeniedException("It is not your address");
+    }
+
 
 }

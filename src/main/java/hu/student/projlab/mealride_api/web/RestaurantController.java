@@ -4,14 +4,17 @@ package hu.student.projlab.mealride_api.web;
 import hu.student.projlab.mealride_api.domain.Restaurant;
 import hu.student.projlab.mealride_api.service.RestaurantService;
 import hu.student.projlab.mealride_api.service.UserService;
+import hu.student.projlab.mealride_api.util.EndpointConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 
 @RestController
-@RequestMapping(value = "/restaurants")
+@RequestMapping(value = EndpointConstants.RESTAURANT_ENDPOINT)
 class RestaurantController {
 
     private RestaurantService restaurantService;
@@ -32,22 +35,22 @@ class RestaurantController {
     }
 
     @PostMapping
-    public ResponseEntity<Object> addRestaurant(@RequestHeader(required = false) String token,
-                                                @RequestBody Restaurant restaurant) {
+    public ResponseEntity<Object> addRestaurant(
+            @RequestBody @Valid Restaurant restaurant) {
 
         return ResponseEntity.badRequest().body(BAD_REQUEST);
     }
 
     @PutMapping
-    public ResponseEntity<Object> modifyRestaurant(@RequestHeader(required = false) String token,
-                                                    @RequestBody Restaurant restaurant) {
+    public ResponseEntity<Object> modifyRestaurant(
+            @RequestBody @Valid Restaurant restaurant) {
 
         return ResponseEntity.badRequest().body(BAD_REQUEST);
     }
 
     @DeleteMapping
-    public ResponseEntity<Object> deleteRestaurant(@RequestHeader(required = false) String token,
-                                                    @RequestBody Restaurant restaurant) {
+    public ResponseEntity<Object> deleteRestaurant(
+            @RequestBody @Valid Restaurant restaurant) {
 
         return ResponseEntity.badRequest().body(BAD_REQUEST);
     }

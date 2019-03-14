@@ -64,16 +64,7 @@ public class CreditCardService {
      */
     public CreditCardDTO updateCard(CreditCardDTO cardDTO) {
 
-        List<CreditCard> userCards =
-                creditCardRepository.findAllByUserId(
-                        userService
-                                .getCurrentUser(SecurityUtils.getCurrentUserLogin())
-                                .getId()).get();
-
-
-        if(!userCards.contains(mapper.creditCardDTOTocreditCard(cardDTO)))
-            throw new AccessDeniedException("It is not your address");
-
+       checkIfUserHasSpecifiedCreditCard(cardDTO);
         return mapper
                 .creditCardTocreditCardDTO(
                         creditCardRepository.save(
@@ -87,9 +78,22 @@ public class CreditCardService {
      */
     public void deleteCard(Long id) {
         CreditCard card = creditCardRepository.findById(id).get();
+        checkIfUserHasSpecifiedCreditCard(mapper.creditCardTocreditCardDTO(card));
         card.setUser(null);
         card.setDeletionDate(LocalDateTime.now());
         creditCardRepository.save(card);
+    }
+
+    private void checkIfUserHasSpecifiedCreditCard(CreditCardDTO cardDTO) {
+        List<CreditCard> userCards =
+                creditCardRepository.findAllByUserId(
+                        userService
+                                .getCurrentUser(SecurityUtils.getCurrentUserLogin())
+                                .getId()).get();
+
+
+        if(!userCards.contains(mapper.creditCardDTOTocreditCard(cardDTO)))
+            throw new AccessDeniedException("It is not your credit card");
     }
 
 }
