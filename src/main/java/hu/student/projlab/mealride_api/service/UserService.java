@@ -33,7 +33,7 @@ public class UserService {
      *
      * @return the database User of the current login
      */
-    public User getCurrentUser(Optional<String> email) {
+    User getCurrentUser(Optional<String> email) {
         if(!email.isPresent())
             return null;
         else {
