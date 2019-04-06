@@ -3,6 +3,7 @@ package hu.student.projlab.mealride_api.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import hu.student.projlab.mealride_api.domain.converter.LocalDateAttributeConverter;
+import hu.student.projlab.mealride_api.domain.user.CustomerUser;
 
 import javax.persistence.*;
 import javax.validation.constraints.Pattern;
@@ -35,7 +36,7 @@ public class CreditCard extends AbstractEntity{
     @JsonIgnore
     @ManyToOne
     @JoinColumn(name="USER_ID")
-    private User user;
+    private CustomerUser customerUser;
 
     public CreditCard() {
     }
@@ -80,12 +81,12 @@ public class CreditCard extends AbstractEntity{
         this.cvc = cvc;
     }
 
-    public User getUser() {
-        return user;
+    public CustomerUser getCustomerUser() {
+        return customerUser;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setCustomerUser(CustomerUser customerUser) {
+        this.customerUser = customerUser;
     }
 
 }

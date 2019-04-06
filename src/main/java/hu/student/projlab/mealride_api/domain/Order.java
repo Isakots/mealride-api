@@ -2,6 +2,7 @@ package hu.student.projlab.mealride_api.domain;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import hu.student.projlab.mealride_api.domain.user.CustomerUser;
 
 import javax.persistence.*;
 import java.util.List;
@@ -19,7 +20,7 @@ public class Order extends AbstractEntity{
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinTable(name="CUSTOMER_ORDERS", joinColumns = { @JoinColumn(name="ORDER_ID")},
             inverseJoinColumns = { @JoinColumn(name="CUSTOMER_ID")})
-    private User customer;
+    private CustomerUser customer;
 
     @JsonIgnore
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
@@ -63,11 +64,11 @@ public class Order extends AbstractEntity{
         this.id = id;
     }
 
-    public User getCustomer() {
+    public CustomerUser getCustomer() {
         return customer;
     }
 
-    public void setCustomer(User customer) {
+    public void setCustomer(CustomerUser customer) {
         this.customer = customer;
     }
 

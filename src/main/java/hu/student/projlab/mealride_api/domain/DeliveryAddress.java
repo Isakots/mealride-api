@@ -1,6 +1,7 @@
 package hu.student.projlab.mealride_api.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import hu.student.projlab.mealride_api.domain.user.CustomerUser;
 
 import javax.persistence.*;
 import javax.validation.constraints.Max;
@@ -46,7 +47,7 @@ public class DeliveryAddress extends AbstractEntity{
     @JsonIgnore
     @ManyToOne
     @JoinColumn(name="USER_ID")
-    private User user;
+    private CustomerUser customerUser;
 
     public DeliveryAddress() {
 
@@ -127,12 +128,12 @@ public class DeliveryAddress extends AbstractEntity{
         this.door = door;
     }
 
-    public User getUser() {
-        return user;
+    public CustomerUser getCustomerUser() {
+        return customerUser;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setCustomerUser(CustomerUser customerUser) {
+        this.customerUser = customerUser;
     }
 
     @Override
@@ -146,7 +147,7 @@ public class DeliveryAddress extends AbstractEntity{
                 ", housenumber=" + housenumber +
                 ", floor=" + floor +
                 ", door=" + door +
-                ", user=" + user +
+                ", customerUser=" + customerUser +
                 '}';
     }
 }

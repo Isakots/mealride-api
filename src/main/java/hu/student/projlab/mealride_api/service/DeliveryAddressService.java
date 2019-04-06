@@ -38,7 +38,7 @@ public class DeliveryAddressService {
      * @return The new address with generated ID
      */
     public DeliveryAddress addAddress(DeliveryAddress address) {
-        address.setUser(userService.getCurrentUser(SecurityUtils.getCurrentUserLogin()));
+        address.setCustomerUser(userService.getCurrentUser(SecurityUtils.getCurrentUserLogin()));
         address.setCreationDate(LocalDateTime.now());
         return deliveryAddressRepository.save(address);
     }
@@ -55,14 +55,14 @@ public class DeliveryAddressService {
     }
 
     /**
-     * Deletes the relation to User.
+     * Deletes the relation to CustomerUser.
      *
      * @param id ID of the address
      */
     public void deleteAddress(Long id) {
         DeliveryAddress address = deliveryAddressRepository.findById(id).get();
         checkIfUserHasSpecifiedAddress(address);
-        address.setUser(null);
+        address.setCustomerUser(null);
         address.setDeletionDate(LocalDateTime.now());
         deliveryAddressRepository.save(address);
     }

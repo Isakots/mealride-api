@@ -15,7 +15,7 @@ import java.util.List;
 
 
 @RestController
-@RequestMapping(value = EndpointConstants.USER_ENDPOINT + EndpointConstants.CREDITCARD_ENDPOINT)
+@RequestMapping(value = EndpointConstants.USER_ENDPOINT + EndpointConstants.CREDITCARD_RESOURCE)
 class CreditCardResource {
 
     private CreditCardService creditCardService;

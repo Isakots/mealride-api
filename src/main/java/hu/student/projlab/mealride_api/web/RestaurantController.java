@@ -1,9 +1,10 @@
 package hu.student.projlab.mealride_api.web;
 
 
-import hu.student.projlab.mealride_api.domain.Restaurant;
+import hu.student.projlab.mealride_api.domain.Meal;
 import hu.student.projlab.mealride_api.service.RestaurantService;
 import hu.student.projlab.mealride_api.service.UserService;
+import hu.student.projlab.mealride_api.service.dto.UserDTO;
 import hu.student.projlab.mealride_api.util.EndpointConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -28,29 +29,59 @@ class RestaurantController {
     }
 
 
-    @GetMapping
-    public ResponseEntity<Object> getRestaurants() {
+    @GetMapping(EndpointConstants.WORKER_RESOURCE)
+    public ResponseEntity<Object> getWorkers() {
 
         return ResponseEntity.badRequest().body(BAD_REQUEST);
     }
 
-    @PostMapping
-    public ResponseEntity<Object> addRestaurant(
-            @RequestBody @Valid Restaurant restaurant) {
+    @PostMapping(EndpointConstants.WORKER_RESOURCE)
+    public ResponseEntity<Object> addWorker(
+            @RequestBody @Valid UserDTO userDTO) {
 
         return ResponseEntity.badRequest().body(BAD_REQUEST);
     }
 
-    @PutMapping
-    public ResponseEntity<Object> modifyRestaurant(
-            @RequestBody @Valid Restaurant restaurant) {
+    @PutMapping(EndpointConstants.WORKER_RESOURCE)
+    public ResponseEntity<Object> updateWorker(
+            @RequestBody @Valid UserDTO userDTO) {
 
         return ResponseEntity.badRequest().body(BAD_REQUEST);
     }
 
-    @DeleteMapping
-    public ResponseEntity<Object> deleteRestaurant(
-            @RequestBody @Valid Restaurant restaurant) {
+    @DeleteMapping(EndpointConstants.WORKER_RESOURCE)
+    public ResponseEntity<Object> deleteWorker(
+            @RequestBody @Valid UserDTO userDTO) {
+
+        return ResponseEntity.badRequest().body(BAD_REQUEST);
+    }
+
+
+
+
+    @GetMapping(EndpointConstants.MENU_RESOURCE)
+    public ResponseEntity<Object> getMenu() {
+
+        return ResponseEntity.badRequest().body(BAD_REQUEST);
+    }
+
+    @PostMapping(EndpointConstants.MENU_RESOURCE)
+    public ResponseEntity<Object> addMeal(
+            @RequestBody @Valid Meal meal) {
+
+        return ResponseEntity.badRequest().body(BAD_REQUEST);
+    }
+
+    @PutMapping(EndpointConstants.MENU_RESOURCE)
+    public ResponseEntity<Object> updateMeal(
+            @RequestBody @Valid Meal meal) {
+
+        return ResponseEntity.badRequest().body(BAD_REQUEST);
+    }
+
+    @DeleteMapping(EndpointConstants.MENU_RESOURCE)
+    public ResponseEntity<Object> deleteMeal(
+            @RequestBody @Valid Meal meal) {
 
         return ResponseEntity.badRequest().body(BAD_REQUEST);
     }

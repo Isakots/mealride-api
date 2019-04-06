@@ -2,13 +2,18 @@ package hu.student.projlab.mealride_api.util;
 
 public final class EndpointConstants {
 
-    public static final String ADDRESS_ENDPOINT = "/addresses";
-    public static final String CREDITCARD_ENDPOINT = "/cards";
-    public static final String MENU_ENDPOINT = "/menu";
+    // Resources
+    public static final String ADDRESS_RESOURCE = "/addresses";
+    public static final String CREDITCARD_RESOURCE = "/cards";
+    public static final String MENU_RESOURCE = "/menu";
+    public static final String RESTAURANT_RESOURCE = "/restaurants";
+    public static final String WORKER_RESOURCE = "/workers";
 
-
+    // CustomerUser role endpoints
     public static final String USER_ENDPOINT = "/user";
     public static final String RESTAURANT_ENDPOINT = "/restaurant";
     public static final String ADMIN_ENDPOINT = "/admin";
+
+    private EndpointConstants() {}
 
 }

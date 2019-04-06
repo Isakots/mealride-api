@@ -1,6 +1,7 @@
 package hu.student.projlab.mealride_api.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import hu.student.projlab.mealride_api.domain.user.CustomerUser;
 
 import javax.persistence.*;
 import java.util.List;
@@ -37,7 +38,7 @@ public class Restaurant{
             joinColumns = {@JoinColumn(name = "RESTAURANT_ID")},
             inverseJoinColumns = {@JoinColumn(name = "WORKER_ID")})
     @Column(name = "WORKER_ID")
-    private List<User> workers;
+    private List<CustomerUser> workers;
 
     @JsonIgnore
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
@@ -114,11 +115,11 @@ public class Restaurant{
         this.menu = menu;
     }
 
-    public List<User> getWorkers() {
+    public List<CustomerUser> getWorkers() {
         return workers;
     }
 
-    public void setWorkers(List<User> workers) {
+    public void setWorkers(List<CustomerUser> workers) {
         this.workers = workers;
     }
 

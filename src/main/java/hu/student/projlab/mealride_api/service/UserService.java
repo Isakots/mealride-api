@@ -1,7 +1,7 @@
 package hu.student.projlab.mealride_api.service;
 
 
-import hu.student.projlab.mealride_api.domain.User;
+import hu.student.projlab.mealride_api.domain.user.CustomerUser;
 import hu.student.projlab.mealride_api.repository.RoleRepository;
 import hu.student.projlab.mealride_api.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,16 +28,16 @@ public class UserService {
     }
 
     /**
-     * Note: This is a bad solution. I cant store yet the authorities of a User in SecurityContext so
+     * Note: This is a bad solution. I cant store yet the authorities of a CustomerUser in SecurityContext so
      * I implement this function as a temporary solution to let me move on.
      *
-     * @return the database User of the current login
+     * @return the database CustomerUser of the current login
      */
-    public User getCurrentUser(Optional<String> email) {
+    public CustomerUser getCurrentUser(Optional<String> email) {
         if(!email.isPresent())
             return null;
         else {
-            Optional<User> user = userRepository.findByEmail(email.get());
+            Optional<CustomerUser> user = userRepository.findByEmail(email.get());
             if (user.isPresent())
                 return user.get();
             else return null;

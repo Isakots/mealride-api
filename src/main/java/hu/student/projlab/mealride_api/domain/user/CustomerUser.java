@@ -1,21 +1,24 @@
-package hu.student.projlab.mealride_api.domain;
+package hu.student.projlab.mealride_api.domain.user;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import hu.student.projlab.mealride_api.domain.Order;
 
 import javax.persistence.*;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 
 @Entity
 @Table(name="USER")
-public class User {
+public class CustomerUser {
 
     @Id
     @GeneratedValue(strategy = GenerationType.TABLE)
     @Column(name="USER_ID")
     private Long id;
+
+    @OneToOne(mappedBy = "customerUser")
+    private SpringUser springUser;
+
     @Column(name="FIRSTNAME")
     private String firstname;
     @Column(name="LASTNAME")
@@ -28,40 +31,20 @@ public class User {
     @Column(name="PHONE")
     private String phone;
 
-    @JsonIgnore
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinTable(name="USER_ROLES", joinColumns = { @JoinColumn(name="USER_ID")},
-                inverseJoinColumns = { @JoinColumn(name="ROLE_ID")})
-    private Set<Role> roles = new HashSet<>();
-
-    @ManyToOne
-    @JoinColumn(name="RESTAURANT_ID")
-    private Restaurant restaurant;
-
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinTable(name="CUSTOMER_ORDERS", joinColumns = { @JoinColumn(name="CUSTOMER_ID")},
             inverseJoinColumns = { @JoinColumn(name="ORDER_ID")})
     private List<Order> orders;
 
-    public User() {}
-
-    public User(String firstname, String lastname, String password, String email, String phone, Set<Role> roles) {
-        this.firstname = firstname;
-        this.lastname = lastname;
-        this.password = password;
-        this.email = email;
-        this.phone = phone;
-        this.roles = roles;
-    }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        User user = (User) o;
-        return Objects.equals(id, user.id) &&
-                Objects.equals(password, user.password) &&
-                Objects.equals(email, user.email);
+        CustomerUser customerUser = (CustomerUser) o;
+        return Objects.equals(id, customerUser.id) &&
+                Objects.equals(password, customerUser.password) &&
+                Objects.equals(email, customerUser.email);
     }
 
 
@@ -111,33 +94,6 @@ public class User {
 
     public void setPhone(String phone) {
         this.phone = phone;
-    }
-
-    public Set<Role> getRoles() {
-        return roles;
-    }
-
-    public void setRoles(Set<Role> roles) {
-        this.roles = roles;
-    }
-
-    public String rolesToString() {
-
-        StringBuilder stringBuilder = new StringBuilder();
-
-        for (Role role: roles) {
-            stringBuilder.append("Role: ");
-            stringBuilder.append(role.getRole()+"\n");
-        }
-        return stringBuilder.toString();
-    }
-
-    public Restaurant getRestaurant() {
-        return restaurant;
-    }
-
-    public void setRestaurant(Restaurant restaurant) {
-        this.restaurant = restaurant;
     }
 
     public List<Order> getOrders() {

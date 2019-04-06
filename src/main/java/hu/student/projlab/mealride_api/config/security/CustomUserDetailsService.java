@@ -1,7 +1,7 @@
 package hu.student.projlab.mealride_api.config.security;
 
 
-import hu.student.projlab.mealride_api.domain.User;
+import hu.student.projlab.mealride_api.domain.user.CustomerUser;
 import hu.student.projlab.mealride_api.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -19,7 +19,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) {
-        Optional<User> user = userRepository.findByEmail(username);
+        Optional<CustomerUser> user = userRepository.findByEmail(username);
 
         if (!user.isPresent()) {
             throw new UsernameNotFoundException(username);

@@ -15,7 +15,7 @@ import java.net.URI;
 import java.util.List;
 
 @RestController
-@RequestMapping(value = EndpointConstants.USER_ENDPOINT + EndpointConstants.ADDRESS_ENDPOINT)
+@RequestMapping(value = EndpointConstants.USER_ENDPOINT + EndpointConstants.ADDRESS_RESOURCE)
 class DeliveryAddressResource {
 
     private DeliveryAddressService deliveryAddressService;

@@ -51,7 +51,7 @@ public class CreditCardService {
      */
     public CreditCardDTO addCard(CreditCardDTO cardDTO) {
         CreditCard card = mapper.creditCardDTOTocreditCard(cardDTO);
-        card.setUser(userService.getCurrentUser(SecurityUtils.getCurrentUserLogin()));
+        card.setCustomerUser(userService.getCurrentUser(SecurityUtils.getCurrentUserLogin()));
         card.setCreationDate(LocalDateTime.now());
         return mapper.creditCardTocreditCardDTO(creditCardRepository.save(card));
     }
@@ -72,14 +72,14 @@ public class CreditCardService {
     }
 
     /**
-     * Deletes the relation to User.
+     * Deletes the relation to CustomerUser.
      *
      * @param id ID of the credit card
      */
     public void deleteCard(Long id) {
         CreditCard card = creditCardRepository.findById(id).get();
         checkIfUserHasSpecifiedCreditCard(mapper.creditCardTocreditCardDTO(card));
-        card.setUser(null);
+        card.setCustomerUser(null);
         card.setDeletionDate(LocalDateTime.now());
         creditCardRepository.save(card);
     }
