@@ -3,7 +3,7 @@ package hu.student.projlab.mealride_api.service.mapper;
 import hu.student.projlab.mealride_api.domain.CreditCard;
 import hu.student.projlab.mealride_api.service.dto.CreditCardDTO;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -14,10 +14,10 @@ import java.util.stream.Collectors;
 @Service
 public class CreditCardMapper {
 
-    private BCryptPasswordEncoder bCryptPasswordEncoder;
+    private PasswordEncoder bCryptPasswordEncoder;
 
     @Autowired
-    public CreditCardMapper(BCryptPasswordEncoder bCryptPasswordEncoder) {
+    public CreditCardMapper(PasswordEncoder bCryptPasswordEncoder) {
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
     }
 

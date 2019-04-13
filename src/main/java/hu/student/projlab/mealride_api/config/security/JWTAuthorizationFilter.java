@@ -23,7 +23,6 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
         super(authManager);
     }
 
-
     @Override
     protected void doFilterInternal(HttpServletRequest req,
                                     HttpServletResponse res,
@@ -38,6 +37,10 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
         UsernamePasswordAuthenticationToken authentication = getAuthentication(req);
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
+
+        //Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        //System.out.println(auth.getName()+" "+ auth.getAuthorities()+" ");
+
         chain.doFilter(req, res);
     }
 
@@ -51,6 +54,8 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
                     .getSubject();
 
             if (user != null) {
+                //UserDetails springUser = userDetailsService.loadUserByUsername(user);
+               // springUser.getAuthorities().stream().map(role->((GrantedAuthority) role).getAuthority()).forEach(System.out::println);
                 // ide kellenének a userdetails authority-k
                 return new UsernamePasswordAuthenticationToken(user, null,new ArrayList<>());
             }

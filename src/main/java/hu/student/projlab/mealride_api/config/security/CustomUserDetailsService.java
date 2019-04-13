@@ -24,8 +24,9 @@ public class CustomUserDetailsService implements UserDetailsService {
         if (!user.isPresent()) {
             throw new UsernameNotFoundException(username);
         }
+        //user.get().getRoles().stream().map(role->role.getRole()).forEach(System.out::println);
 
-       return new org.springframework.security.core.userdetails.User(user.get().getUsername(),user.get().getPassword(),user.get().getRoles());
+       return UserPrinciple.build(user.get());
     }
 
 

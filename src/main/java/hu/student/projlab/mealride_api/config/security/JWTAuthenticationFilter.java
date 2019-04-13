@@ -37,6 +37,14 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
             UserDTO creds = new ObjectMapper()
                     .readValue(req.getInputStream(), UserDTO.class);
 
+            Authentication auth =authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(
+                            creds.getUsername(),
+                            creds.getPassword(),
+                            new ArrayList<>()));
+
+           // auth.getAuthorities().stream().map(role->((GrantedAuthority) role).getAuthority().toString()).forEach(System.out::println);
+
             return authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
                             creds.getUsername(),
@@ -59,9 +67,9 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                 .withExpiresAt(new Date(System.currentTimeMillis() + SecurityConstants.EXPIRATION_TIME))
                 .sign(HMAC512(SecurityConstants.SECRET.getBytes()));
         res.addHeader(SecurityConstants.HEADER_STRING, SecurityConstants.TOKEN_PREFIX + token);
-        /*res.getWriter().write("{\n" +
-                "  \"token\": " +"\" " + token + "\"\n" +
-                "}");*/
-        res.getWriter().write("{ }");
+        res.getWriter().write("{\n" +
+                "  \"token\": " +"\" " + SecurityConstants.TOKEN_PREFIX + token + "\"\n" +
+                "}");
+       // res.getWriter().write("{ }");
     }
 }

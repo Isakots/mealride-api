@@ -10,7 +10,7 @@ import java.util.Set;
 
 @Entity
 @Table(name="BASIC_USER")
-public class SpringUser {
+public class SpringUser{
 
     @Id
     @GeneratedValue(strategy = GenerationType.TABLE)
