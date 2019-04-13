@@ -8,6 +8,6 @@ import java.util.Optional;
 
 public interface DeliveryAddressRepository extends JpaRepository<DeliveryAddress, Long> {
 
-    Optional<List<DeliveryAddress>> findAllByUserId(Long userId);
+    Optional<List<DeliveryAddress>> findAllByCustomerUserId(Long userId);
 
 }

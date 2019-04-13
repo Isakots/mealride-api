@@ -1,7 +1,7 @@
 package hu.student.projlab.mealride_api.service;
 
 
-import hu.student.projlab.mealride_api.domain.user.CustomerUser;
+import hu.student.projlab.mealride_api.domain.user.SpringUser;
 import hu.student.projlab.mealride_api.repository.RoleRepository;
 import hu.student.projlab.mealride_api.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,11 +33,11 @@ public class UserService {
      *
      * @return the database CustomerUser of the current login
      */
-    public CustomerUser getCurrentUser(Optional<String> email) {
+    public SpringUser getCurrentUser(Optional<String> email) {
         if(!email.isPresent())
             return null;
         else {
-            Optional<CustomerUser> user = userRepository.findByEmail(email.get());
+            Optional<SpringUser> user = userRepository.findByUsername(email.get());
             if (user.isPresent())
                 return user.get();
             else return null;

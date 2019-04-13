@@ -26,7 +26,7 @@ public class DeliveryAddressService {
     }
 
     public List<DeliveryAddress> findAll() {
-        return deliveryAddressRepository.findAllByUserId(
+        return deliveryAddressRepository.findAllByCustomerUserId(
                 userService.getCurrentUser(SecurityUtils.getCurrentUserLogin()).getId()).get();
         // TODO NoSuchElementException-Handler (for controller class)
     }
@@ -38,7 +38,7 @@ public class DeliveryAddressService {
      * @return The new address with generated ID
      */
     public DeliveryAddress addAddress(DeliveryAddress address) {
-        address.setCustomerUser(userService.getCurrentUser(SecurityUtils.getCurrentUserLogin()));
+        address.setCustomerUser(userService.getCurrentUser(SecurityUtils.getCurrentUserLogin()).getCustomerUser());
         address.setCreationDate(LocalDateTime.now());
         return deliveryAddressRepository.save(address);
     }
@@ -69,7 +69,7 @@ public class DeliveryAddressService {
 
     private void checkIfUserHasSpecifiedAddress(DeliveryAddress address) {
         List<DeliveryAddress> userAddresses =
-                deliveryAddressRepository.findAllByUserId(
+                deliveryAddressRepository.findAllByCustomerUserId(
                         userService
                                 .getCurrentUser(SecurityUtils.getCurrentUserLogin())
                                 .getId()).get();

@@ -34,7 +34,7 @@ public class CreditCardService {
 
         return mapper
                 .creditCardListTocreditCardDTOList(
-                        creditCardRepository.findAllByUserId(
+                        creditCardRepository.findAllByCustomerUserId(
                              userService
                                 .getCurrentUser(SecurityUtils.getCurrentUserLogin())
                                 .getId()).get());
@@ -51,7 +51,7 @@ public class CreditCardService {
      */
     public CreditCardDTO addCard(CreditCardDTO cardDTO) {
         CreditCard card = mapper.creditCardDTOTocreditCard(cardDTO);
-        card.setCustomerUser(userService.getCurrentUser(SecurityUtils.getCurrentUserLogin()));
+        card.setCustomerUser(userService.getCurrentUser(SecurityUtils.getCurrentUserLogin()).getCustomerUser());
         card.setCreationDate(LocalDateTime.now());
         return mapper.creditCardTocreditCardDTO(creditCardRepository.save(card));
     }
@@ -86,7 +86,7 @@ public class CreditCardService {
 
     private void checkIfUserHasSpecifiedCreditCard(CreditCardDTO cardDTO) {
         List<CreditCard> userCards =
-                creditCardRepository.findAllByUserId(
+                creditCardRepository.findAllByCustomerUserId(
                         userService
                                 .getCurrentUser(SecurityUtils.getCurrentUserLogin())
                                 .getId()).get();

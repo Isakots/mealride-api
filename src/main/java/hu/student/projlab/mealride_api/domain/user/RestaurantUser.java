@@ -15,8 +15,8 @@ public class RestaurantUser {
     @OneToOne(mappedBy = "restaurantUser")
     private SpringUser springUser;
 
-   // @ManyToOne
-   // @JoinColumn(name="RESTAURANT_ID")
+    @ManyToOne
+    @JoinColumn(name="RESTAURANT_ID")
     private Restaurant restaurant;
 
 }

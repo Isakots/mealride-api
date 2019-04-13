@@ -1,13 +1,12 @@
 package hu.student.projlab.mealride_api.service.dto;
 
-import javax.validation.constraints.Min;
 import java.io.Serializable;
 
 public class UserDTO implements Serializable {
 
     private String username;
 
-    @Min(8)
+    //@Min(8)
     private String password;
 
     public UserDTO() {
