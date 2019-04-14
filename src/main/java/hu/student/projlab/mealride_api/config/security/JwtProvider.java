@@ -15,17 +15,14 @@ public class JwtProvider {
 
     private static final Logger logger = LoggerFactory.getLogger(JwtProvider.class);
 
-    //@Value("${grokonez.app.jwtSecret}")
     private String jwtSecret = SecurityConstants.SECRET;
  
-    //@Value("${grokonez.app.jwtExpiration}")
     private int jwtExpiration = SecurityConstants.EXPIRATION_TIME;
 
     private SecretKey key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
  
     public String generateJwtToken(Authentication authentication) {
         UserPrinciple userPrincipal = (UserPrinciple) authentication.getPrincipal();
-
 
         return Jwts.builder()
                     .setSubject((userPrincipal.getUsername()))

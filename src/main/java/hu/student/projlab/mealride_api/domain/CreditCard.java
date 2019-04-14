@@ -35,8 +35,8 @@ public class CreditCard extends AbstractEntity{
 
     @JsonIgnore
     @ManyToOne
-    @JoinColumn(name="USER_ID")
-    private CustomerUser customerUser;
+    @JoinColumn(name="CUSTOMERUSER_ID")
+    private CustomerUser customer;
 
     public CreditCard() {
     }
@@ -81,12 +81,12 @@ public class CreditCard extends AbstractEntity{
         this.cvc = cvc;
     }
 
-    public CustomerUser getCustomerUser() {
-        return customerUser;
+    public CustomerUser getCustomer() {
+        return customer;
     }
 
-    public void setCustomerUser(CustomerUser customerUser) {
-        this.customerUser = customerUser;
+    public void setCustomer(CustomerUser customer) {
+        this.customer = customer;
     }
 
 }

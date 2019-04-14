@@ -33,19 +33,7 @@ public class UserService {
      *
      * @return the database CustomerUser of the current login
      */
-    public SpringUser getCurrentUser(Optional<String> email) {
-        if(!email.isPresent())
-            return null;
-        else {
-            Optional<SpringUser> user = userRepository.findByUsername(email.get());
-            if (user.isPresent())
-                return user.get();
-            else return null;
-        }
+    public Optional<SpringUser> getCurrentUser(Optional<String> email) {
+        return userRepository.findByUsername(email.get());
     }
-
-
-
-
-
 }

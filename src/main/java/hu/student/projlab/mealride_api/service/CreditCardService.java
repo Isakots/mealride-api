@@ -2,6 +2,7 @@ package hu.student.projlab.mealride_api.service;
 
 import hu.student.projlab.mealride_api.config.security.SecurityUtils;
 import hu.student.projlab.mealride_api.domain.CreditCard;
+import hu.student.projlab.mealride_api.exception.UserIsNotAuthenticatedException;
 import hu.student.projlab.mealride_api.repository.CreditCardRepository;
 import hu.student.projlab.mealride_api.service.dto.CreditCardDTO;
 import hu.student.projlab.mealride_api.service.mapper.CreditCardMapper;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -30,16 +32,14 @@ public class CreditCardService {
         this.userService = userService;
     }
 
-    public List<CreditCardDTO> findAll() {
-
+    public List<CreditCardDTO> findAll() throws UserIsNotAuthenticatedException {
         return mapper
                 .creditCardListTocreditCardDTOList(
-                        creditCardRepository.findAllByCustomerUserId(
-                             userService
-                                .getCurrentUser(SecurityUtils.getCurrentUserLogin())
-                                .getId()).get());
-
-        // TODO NoSuchElementException-Handler (for controller class)
+                        creditCardRepository.findAllByCustomerId(
+                                userService.getCurrentUser(SecurityUtils.getCurrentUserLogin())
+                                        .orElseThrow(() -> new UserIsNotAuthenticatedException("User not found."))
+                                        .getCustomerUser().getId())
+                                .orElse(Collections.emptyList()));
 
     }
 
@@ -49,9 +49,12 @@ public class CreditCardService {
      * @param cardDTO Credit card which needs to be persisted.
      * @return The new credit card with generated ID
      */
-    public CreditCardDTO addCard(CreditCardDTO cardDTO) {
+    public CreditCardDTO addCard(CreditCardDTO cardDTO) throws UserIsNotAuthenticatedException {
         CreditCard card = mapper.creditCardDTOTocreditCard(cardDTO);
-        card.setCustomerUser(userService.getCurrentUser(SecurityUtils.getCurrentUserLogin()).getCustomerUser());
+        card.setCustomer(
+                userService.getCurrentUser(SecurityUtils.getCurrentUserLogin())
+                        .orElseThrow(() -> new UserIsNotAuthenticatedException("User not found."))
+                        .getCustomerUser());
         card.setCreationDate(LocalDateTime.now());
         return mapper.creditCardTocreditCardDTO(creditCardRepository.save(card));
     }
@@ -62,7 +65,7 @@ public class CreditCardService {
      * @param cardDTO Credit card which needs to be updated.
      * @return The credit card with updated values
      */
-    public CreditCardDTO updateCard(CreditCardDTO cardDTO) {
+    public CreditCardDTO updateCard(CreditCardDTO cardDTO) throws UserIsNotAuthenticatedException {
 
        checkIfUserHasSpecifiedCreditCard(cardDTO);
         return mapper
@@ -76,20 +79,22 @@ public class CreditCardService {
      *
      * @param id ID of the credit card
      */
-    public void deleteCard(Long id) {
+    public void deleteCard(Long id) throws UserIsNotAuthenticatedException {
         CreditCard card = creditCardRepository.findById(id).get();
         checkIfUserHasSpecifiedCreditCard(mapper.creditCardTocreditCardDTO(card));
-        card.setCustomerUser(null);
+        card.setCustomer(null);
         card.setDeletionDate(LocalDateTime.now());
         creditCardRepository.save(card);
     }
 
-    private void checkIfUserHasSpecifiedCreditCard(CreditCardDTO cardDTO) {
+    private void checkIfUserHasSpecifiedCreditCard(CreditCardDTO cardDTO) throws UserIsNotAuthenticatedException {
         List<CreditCard> userCards =
-                creditCardRepository.findAllByCustomerUserId(
+                creditCardRepository.findAllByCustomerId(
                         userService
                                 .getCurrentUser(SecurityUtils.getCurrentUserLogin())
-                                .getId()).get();
+                                .orElseThrow(() -> new UserIsNotAuthenticatedException("User not found."))
+                                .getCustomerUser().getId())
+                        .orElse(Collections.emptyList());
 
 
         if(!userCards.contains(mapper.creditCardDTOTocreditCard(cardDTO)))

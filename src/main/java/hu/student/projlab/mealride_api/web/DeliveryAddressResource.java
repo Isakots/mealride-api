@@ -2,6 +2,7 @@ package hu.student.projlab.mealride_api.web;
 
 
 import hu.student.projlab.mealride_api.domain.DeliveryAddress;
+import hu.student.projlab.mealride_api.exception.UserIsNotAuthenticatedException;
 import hu.student.projlab.mealride_api.service.DeliveryAddressService;
 import hu.student.projlab.mealride_api.util.EndpointConstants;
 import hu.student.projlab.mealride_api.util.HeaderUtil;
@@ -26,13 +27,11 @@ class DeliveryAddressResource {
     }
 
     @GetMapping
-    public ResponseEntity<List<DeliveryAddress>> getAddresses() {
+    public ResponseEntity<List<DeliveryAddress>> getAddresses() throws UserIsNotAuthenticatedException {
 
         List<DeliveryAddress> result = deliveryAddressService.findAll();
-
         return new ResponseEntity<>(
                 result, null, HttpStatus.OK);
-
     }
 
     @PostMapping
@@ -52,7 +51,7 @@ class DeliveryAddressResource {
 
     @PutMapping
     public ResponseEntity<DeliveryAddress> updateAddress(
-            @RequestBody @Valid DeliveryAddress address) {
+            @RequestBody @Valid DeliveryAddress address) throws UserIsNotAuthenticatedException {
         if(address.getId() == null)
             return ResponseEntity.notFound()
                     .headers(HeaderUtil.createAlert(
@@ -67,12 +66,17 @@ class DeliveryAddressResource {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteAddress(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteAddress(@PathVariable Long id) throws UserIsNotAuthenticatedException {
         deliveryAddressService.deleteAddress(id);
         return ResponseEntity
                 .ok()
                 .headers(HeaderUtil.createEntityDeletionAlert("Address", id.toString()))
                 .build();
+    }
+
+    @ExceptionHandler(UserIsNotAuthenticatedException.class)
+    protected ResponseEntity<?> handleUserNotAuthenticated(UserIsNotAuthenticatedException e) {
+        return new ResponseEntity<>(e.getMessage(), null, HttpStatus.NOT_FOUND);
     }
 
  }

@@ -44,10 +44,11 @@ public class DeliveryAddress extends AbstractEntity{
     @Column(name="DOOR")
     private Short door;
 
-    @JsonIgnore
+
     @ManyToOne
-    @JoinColumn(name="USER_ID")
-    private CustomerUser customerUser;
+    @JoinColumn(name="CUSTOMERUSER_ID")
+    @JsonIgnore
+    private CustomerUser customer;
 
     public DeliveryAddress() {
 
@@ -128,12 +129,12 @@ public class DeliveryAddress extends AbstractEntity{
         this.door = door;
     }
 
-    public CustomerUser getCustomerUser() {
-        return customerUser;
+    public CustomerUser getCustomer() {
+        return customer;
     }
 
-    public void setCustomerUser(CustomerUser customerUser) {
-        this.customerUser = customerUser;
+    public void setCustomer(CustomerUser customer) {
+        this.customer = customer;
     }
 
     @Override
@@ -147,7 +148,7 @@ public class DeliveryAddress extends AbstractEntity{
                 ", housenumber=" + housenumber +
                 ", floor=" + floor +
                 ", door=" + door +
-                ", customerUser=" + customerUser +
+                ", customerUser=" + customer +
                 '}';
     }
 }

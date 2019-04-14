@@ -1,5 +1,6 @@
 package hu.student.projlab.mealride_api.web;
 
+import hu.student.projlab.mealride_api.exception.UserIsNotAuthenticatedException;
 import hu.student.projlab.mealride_api.service.CreditCardService;
 import hu.student.projlab.mealride_api.service.dto.CreditCardDTO;
 import hu.student.projlab.mealride_api.util.EndpointConstants;
@@ -26,7 +27,7 @@ class CreditCardResource {
     }
 
     @GetMapping
-    public ResponseEntity<List<CreditCardDTO>> getCards() {
+    public ResponseEntity<List<CreditCardDTO>> getCards() throws UserIsNotAuthenticatedException {
 
         List<CreditCardDTO> result = creditCardService.findAll();
 
@@ -52,7 +53,7 @@ class CreditCardResource {
 
     @PutMapping
     public ResponseEntity<CreditCardDTO> updateCard(
-            @RequestBody @Valid CreditCardDTO creditCard) {
+            @RequestBody @Valid CreditCardDTO creditCard) throws UserIsNotAuthenticatedException {
 
         if(creditCard.getId() == null)
             return ResponseEntity.notFound()
@@ -68,7 +69,7 @@ class CreditCardResource {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteCard(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteCard(@PathVariable Long id) throws UserIsNotAuthenticatedException {
         creditCardService.deleteCard(id);
         return ResponseEntity
                 .ok()
