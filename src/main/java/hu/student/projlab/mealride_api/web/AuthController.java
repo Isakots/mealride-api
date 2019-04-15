@@ -18,7 +18,7 @@ import javax.validation.Valid;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
-public class AuthRestAPIs {
+public class AuthController {
  
   @Autowired
   AuthenticationManager authenticationManager;

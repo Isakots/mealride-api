@@ -98,7 +98,7 @@ public class CreditCardService {
 
 
         if(!userCards.contains(mapper.creditCardDTOTocreditCard(cardDTO)))
-            throw new AccessDeniedException("It is not your credit card");
+            throw new AccessDeniedException("Card not found.");
     }
 
 }

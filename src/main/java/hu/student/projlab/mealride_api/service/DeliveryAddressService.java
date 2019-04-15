@@ -84,7 +84,7 @@ public class DeliveryAddressService {
                         .orElse(Collections.emptyList());
 
         if(!userAddresses.contains(address))
-            throw new AccessDeniedException("It is not your address");
+            throw new AccessDeniedException("Address not found.");
     }
 
 
