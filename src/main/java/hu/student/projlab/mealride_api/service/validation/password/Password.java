@@ -1,4 +1,4 @@
-package hu.student.projlab.mealride_api.service.validation;
+package hu.student.projlab.mealride_api.service.validation.password;
 
 
 import javax.validation.Constraint;
