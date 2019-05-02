@@ -14,7 +14,7 @@ public class CustomerUser {
     private Long id;
 
     @OneToOne(mappedBy = "customerUser")
-    private SpringUser springUser;
+    private SpringUser springuser;
 
     @Column(name="FIRSTNAME")
     private String firstname;
@@ -34,6 +34,14 @@ public class CustomerUser {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public SpringUser getSpringuser() {
+        return springuser;
+    }
+
+    public void setSpringuser(SpringUser springuser) {
+        this.springuser = springuser;
     }
 
     public String getFirstname() {

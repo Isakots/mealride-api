@@ -90,7 +90,7 @@ public class MealrideApiApplicationTests {
         mockMvc.perform(get("/user/addresses")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$", hasSize(4)))
+                .andExpect(jsonPath("$", hasSize(7)))
                 .andExpect(jsonPath("$[0].city", equalTo(address.getCity())));
 
     }

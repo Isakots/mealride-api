@@ -9,8 +9,4 @@ public interface UserRepository extends CrudRepository<SpringUser, Long> {
 
     Optional<SpringUser> findByUsername(String email);
 
-    //@Query(value="SELECT u.restaurant_id FROM User u WHERE u.user_id = :userid ", nativeQuery =  true)
-    //Long findRestaurantIdByUserId(@Param("userid") Long userid);
-
-    SpringUser getUserById(Long id);
 }

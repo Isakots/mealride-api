@@ -27,7 +27,6 @@ class RestaurantResource {
         this.userService = userService;
     }
 
-
     @GetMapping
     public ResponseEntity<Object> getRestaurants() {
 

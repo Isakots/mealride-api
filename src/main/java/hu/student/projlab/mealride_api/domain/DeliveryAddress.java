@@ -50,9 +50,7 @@ public class DeliveryAddress extends AbstractEntity{
     @JsonIgnore
     private CustomerUser customer;
 
-    public DeliveryAddress() {
-
-    }
+    public DeliveryAddress() { }
 
     public DeliveryAddress(@Pattern(regexp = "[0-9]{4}") String zipcode, @Size(max = 31) String city, @Size(max = 63) String street,
                            @Size(max = 31) String state, @Max(999) Short housenumber, @Max(100) Short floor, @Max(9999) Short door) {

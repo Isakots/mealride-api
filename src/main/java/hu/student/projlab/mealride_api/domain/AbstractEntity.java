@@ -5,9 +5,11 @@ import hu.student.projlab.mealride_api.domain.converter.LocalDateTimeAttributeCo
 
 import javax.persistence.Column;
 import javax.persistence.Convert;
+import javax.persistence.MappedSuperclass;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
+@MappedSuperclass
 public abstract class AbstractEntity implements Serializable {
 
     @JsonIgnore
