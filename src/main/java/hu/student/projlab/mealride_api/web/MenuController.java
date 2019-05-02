@@ -16,47 +16,17 @@ import static org.springframework.http.HttpStatus.BAD_REQUEST;
 
 @RestController
 @RequestMapping(value = EndpointConstants.RESTAURANT_ENDPOINT)
-class RestaurantController {
+class MenuController {
 
     private RestaurantService restaurantService;
 
     private UserService userService;
 
     @Autowired
-    public RestaurantController(RestaurantService restaurantService, UserService userService) {
+    public MenuController(RestaurantService restaurantService, UserService userService) {
         this.restaurantService = restaurantService;
         this.userService = userService;
     }
-
-
-    @GetMapping(EndpointConstants.WORKER_RESOURCE)
-    public ResponseEntity<Object> getWorkers() {
-
-        return ResponseEntity.badRequest().body(BAD_REQUEST);
-    }
-
-    @PostMapping(EndpointConstants.WORKER_RESOURCE)
-    public ResponseEntity<Object> addWorker(
-            @RequestBody @Valid UserDTO userDTO) {
-
-        return ResponseEntity.badRequest().body(BAD_REQUEST);
-    }
-
-    @PutMapping(EndpointConstants.WORKER_RESOURCE)
-    public ResponseEntity<Object> updateWorker(
-            @RequestBody @Valid UserDTO userDTO) {
-
-        return ResponseEntity.badRequest().body(BAD_REQUEST);
-    }
-
-    @DeleteMapping(EndpointConstants.WORKER_RESOURCE)
-    public ResponseEntity<Object> deleteWorker(
-            @RequestBody @Valid UserDTO userDTO) {
-
-        return ResponseEntity.badRequest().body(BAD_REQUEST);
-    }
-
-
 
 
     @GetMapping(EndpointConstants.MENU_RESOURCE)
@@ -85,7 +55,6 @@ class RestaurantController {
 
         return ResponseEntity.badRequest().body(BAD_REQUEST);
     }
-
 
 
 }

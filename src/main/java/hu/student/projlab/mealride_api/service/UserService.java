@@ -6,8 +6,11 @@ import hu.student.projlab.mealride_api.repository.RoleRepository;
 import hu.student.projlab.mealride_api.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 
@@ -16,15 +19,24 @@ public class UserService {
 
     private UserRepository userRepository;
 
-    private BCryptPasswordEncoder bCryptPasswordEncoder;
+    private PasswordEncoder PasswordEncoder;
 
     private RoleRepository roleRepository;
 
     @Autowired
-    public UserService(UserRepository userRepository, BCryptPasswordEncoder bCryptPasswordEncoder, RoleRepository roleRepository) {
+    public UserService(UserRepository userRepository, PasswordEncoder PasswordEncoder, RoleRepository roleRepository) {
         this.userRepository = userRepository;
-        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
+        this.PasswordEncoder = PasswordEncoder;
         this.roleRepository = roleRepository;
+    }
+
+    public List<SpringUser> findAllWorkers(Long restaurantId) {
+        return userRepository.findAllByRestaurantUserRestaurantId(restaurantId)
+                .orElse(Collections.emptyList());
+    }
+
+    public Optional<SpringUser> findByEmail(String email) {
+        return userRepository.findByUsername(email);
     }
 
     /**

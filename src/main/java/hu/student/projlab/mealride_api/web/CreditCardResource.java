@@ -29,12 +29,9 @@ class CreditCardResource {
 
     @GetMapping
     public ResponseEntity<List<CreditCardDTO>> getCards() throws UserIsNotAuthenticatedException {
-
         List<CreditCardDTO> result = creditCardService.findAll();
-
         return new ResponseEntity<>(
                 result, null, HttpStatus.OK);
-
     }
 
     @PostMapping
