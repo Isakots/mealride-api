@@ -1,5 +1,6 @@
 package hu.student.projlab.mealride_api.web;
 
+import hu.student.projlab.mealride_api.exception.InvalidDataException;
 import hu.student.projlab.mealride_api.exception.UserIsNotAuthenticatedException;
 import hu.student.projlab.mealride_api.service.CreditCardService;
 import hu.student.projlab.mealride_api.service.dto.CreditCardDTO;
@@ -28,20 +29,17 @@ class CreditCardResource {
 
     @GetMapping
     public ResponseEntity<List<CreditCardDTO>> getCards() throws UserIsNotAuthenticatedException {
-
         List<CreditCardDTO> result = creditCardService.findAll();
         return new ResponseEntity<>(
                 result, null, HttpStatus.OK);
-
     }
 
     @PostMapping
     public ResponseEntity<CreditCardDTO> addCard(
             @RequestBody @Valid CreditCardDTO creditCard) throws Exception {
 
-        if(creditCard.getId() != null)
-            throw new Exception();
-        // TODO: Create an exceptionhandler class and an Exception type for this.
+        if (creditCard.getId() != null)
+            throw new InvalidDataException();
 
         CreditCardDTO newCard = creditCardService.addCard(creditCard);
         return ResponseEntity.created(new URI("/" + newCard.getId()))
@@ -54,10 +52,10 @@ class CreditCardResource {
     public ResponseEntity<CreditCardDTO> updateCard(
             @RequestBody @Valid CreditCardDTO creditCard) throws UserIsNotAuthenticatedException {
 
-        if(creditCard.getId() == null)
+        if (creditCard.getId() == null)
             return ResponseEntity.notFound()
                     .headers(HeaderUtil.createAlert(
-                            "Credit Card not found",null))
+                            "Credit Card not found", null))
                     .build();
 
         CreditCardDTO result = creditCardService.updateCard(creditCard);
