@@ -1,6 +1,6 @@
 package hu.student.projlab.mealride_api.exception;
 
-public class PasswordNotMatchingException extends Throwable {
+public class PasswordNotMatchingException extends Exception {
 
     private String message;
 

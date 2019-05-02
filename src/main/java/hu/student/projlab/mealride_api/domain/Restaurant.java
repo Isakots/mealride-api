@@ -8,18 +8,18 @@ import java.util.List;
 
 
 @Entity
-public class Restaurant{
+public class Restaurant extends AbstractEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    @Column(name="RESTAURANT_NAME")
+    @Column(name = "RESTAURANT_NAME")
     private String name;
-    @Column(name="AVERAGE_DELIVERY_TIME")
+    @Column(name = "AVERAGE_DELIVERY_TIME")
     private String avgdeliverytime;
-    @Column(name="MINIMUM_ORDER_PRICE")
+    @Column(name = "MINIMUM_ORDER_PRICE")
     private Short minorderprice;
-    @Column(name="DELIVERY_PRICE")
+    @Column(name = "DELIVERY_PRICE")
     private Short deliveryprice;
 
     @Embedded
@@ -42,8 +42,8 @@ public class Restaurant{
 
     @JsonIgnore
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinTable(name="RESTAURANT_ORDERS", joinColumns = { @JoinColumn(name="RESTAURANT_ID")},
-            inverseJoinColumns = { @JoinColumn(name="ORDER_ID")})
+    @JoinTable(name = "RESTAURANT_ORDERS", joinColumns = {@JoinColumn(name = "RESTAURANT_ID")},
+            inverseJoinColumns = {@JoinColumn(name = "ORDER_ID")})
     private List<Order> orders;
 
 
@@ -132,8 +132,8 @@ public class Restaurant{
     }
 
     public void printmenu() {
-        for(Meal meal: menu) {
-            System.out.println("Meal name: "+ meal.getName()+" Price: "+ meal.getPrice()+" Comment: "+meal.getComment());
+        for (Meal meal : menu) {
+            System.out.println("Meal name: " + meal.getName() + " Price: " + meal.getPrice() + " Comment: " + meal.getComment());
         }
     }
 }

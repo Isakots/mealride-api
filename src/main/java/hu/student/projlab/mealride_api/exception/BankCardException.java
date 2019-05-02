@@ -1,6 +1,6 @@
 package hu.student.projlab.mealride_api.exception;
 
-public class BankCardException extends Throwable {
+public class BankCardException extends Exception {
 
     private String message;
 
