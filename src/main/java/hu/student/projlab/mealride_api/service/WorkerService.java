@@ -32,7 +32,8 @@ public class WorkerService {
     }
 
     public List<WorkerDTO> findAll(Long id) throws UserIsNotAuthenticatedException, InvalidDataException {
-        if (id != userService.getCurrentUser(SecurityUtils.getCurrentUserLogin()).orElseThrow(() -> new UserIsNotAuthenticatedException("User not found."))
+        if (id != userService.getCurrentUser(SecurityUtils.getCurrentUserLogin())
+                .orElseThrow(() -> new UserIsNotAuthenticatedException("User not found."))
                 .getRestaurantUser().getRestaurant().getId())
             throw new InvalidDataException();
         List<SpringUser> users = userService.findAllWorkers(id);
@@ -49,6 +50,13 @@ public class WorkerService {
                 .orElseThrow(() -> new UserIsNotAuthenticatedException("User not found."))
                 .getRestaurantUser().getRestaurant());
         // TODO save restaurantuser
+
+        // 1. Check if user exists
+        // 2. Check if current user has restaurant
+        // 3. Check if current user has ROLE_RESTADMIN (it is checked in controller with @PreAuthorize !)
+        // 4. Set worker to restaurants
+        // 5. Add user to Restaurant's workers list
+        // 6. Return the new worker data
 
 
 

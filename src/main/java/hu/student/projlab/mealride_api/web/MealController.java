@@ -6,33 +6,36 @@ import hu.student.projlab.mealride_api.service.RestaurantService;
 import hu.student.projlab.mealride_api.service.UserService;
 import hu.student.projlab.mealride_api.util.EndpointConstants;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 
 @RestController
 @RequestMapping(value = EndpointConstants.RESTAURANT_ENDPOINT)
-class MenuController {
+class MealController {
 
     private RestaurantService restaurantService;
 
     private UserService userService;
 
     @Autowired
-    public MenuController(RestaurantService restaurantService, UserService userService) {
+    public MealController(RestaurantService restaurantService, UserService userService) {
         this.restaurantService = restaurantService;
         this.userService = userService;
     }
 
     @PreAuthorize("hasRole('ROLE_RESTWORKER') or hasRole('ROLE_RESTADMIN')")
     @GetMapping(EndpointConstants.MENU_RESOURCE)
-    public ResponseEntity<Object> getMenu() {
-
-        return ResponseEntity.badRequest().body(BAD_REQUEST);
+    public ResponseEntity<List<Meal>>getMenu() {
+        List<Meal> result = .findAll();
+        return new ResponseEntity<>(
+                result, null, HttpStatus.OK);
     }
 
     @PreAuthorize("hasRole('ROLE_RESTWORKER') or hasRole('ROLE_RESTADMIN')")
