@@ -1,6 +1,7 @@
 package hu.student.projlab.mealride_api.web.exceptionhandler;
 
 import com.google.gson.Gson;
+import hu.student.projlab.mealride_api.exception.AlreadyAddedToRestaurantException;
 import hu.student.projlab.mealride_api.exception.InvalidDataException;
 import hu.student.projlab.mealride_api.exception.UserIsNotAuthenticatedException;
 import org.springframework.http.HttpStatus;
@@ -21,17 +22,22 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(UserIsNotAuthenticatedException.class)
     protected ResponseEntity<?> handleUserNotAuthenticated(UserIsNotAuthenticatedException e) {
-        return new ResponseEntity<>(wrapMessageToJSON(e.getMessage()), null, HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(wrapMessageToJSON(e.getMessage()), null, HttpStatus.UNAUTHORIZED);
     }
 
     @ExceptionHandler(InvalidDataException.class)
     protected ResponseEntity<?> handleInvalidData(InvalidDataException e) {
-        return new ResponseEntity<>(wrapMessageToJSON(e.getMessage()), null, HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(wrapMessageToJSON(e.getMessage()), null, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(AccessDeniedException.class)
     protected ResponseEntity<?> handleAccessDenied(AccessDeniedException e) {
-        return new ResponseEntity<>(wrapMessageToJSON(e.getMessage()), null, HttpStatus.UNAUTHORIZED);
+        return new ResponseEntity<>(wrapMessageToJSON(e.getMessage()), null, HttpStatus.FORBIDDEN);
+    }
+
+    @ExceptionHandler(AlreadyAddedToRestaurantException.class)
+    protected ResponseEntity<?> handleAlreadyAddedToRestaurant(AlreadyAddedToRestaurantException e) {
+        return new ResponseEntity<>(wrapMessageToJSON(e.getMessage()), null, HttpStatus.BAD_REQUEST);
     }
 
     private String wrapMessageToJSON(String message) {

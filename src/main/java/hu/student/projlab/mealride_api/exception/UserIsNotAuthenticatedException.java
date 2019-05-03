@@ -1,17 +1,13 @@
 package hu.student.projlab.mealride_api.exception;
 
-import hu.student.projlab.mealride_api.web.exceptionhandler.Message;
-
 public class UserIsNotAuthenticatedException extends Exception {
+    private final String message = "User not found.";
 
-    private Message message;
-
-    public UserIsNotAuthenticatedException(String message) {
-       this.message = new Message(message);
+    public UserIsNotAuthenticatedException() {
     }
 
     @Override
     public String getMessage() {
-        return message.getMessage();
+        return this.message;
     }
 }

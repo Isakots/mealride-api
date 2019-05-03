@@ -1,6 +1,7 @@
 package hu.student.projlab.mealride_api.web;
 
 
+import hu.student.projlab.mealride_api.exception.AlreadyAddedToRestaurantException;
 import hu.student.projlab.mealride_api.exception.InvalidDataException;
 import hu.student.projlab.mealride_api.exception.UserIsNotAuthenticatedException;
 import hu.student.projlab.mealride_api.exception.UserNotFoundException;
@@ -40,14 +41,14 @@ class WorkerController {
 
     @PreAuthorize("hasRole('ROLE_RESTADMIN')")
     @PostMapping(EndpointConstants.WORKER_RESOURCE)
-    public ResponseEntity<WorkerDTO> addWorker(@RequestBody UserDTO userDTO) throws UserNotFoundException, UserIsNotAuthenticatedException {
-        WorkerDTO worker = workerService.addWorker(userDTO);
+    public ResponseEntity<WorkerDTO> addWorker(@RequestBody String workerEmail) throws UserNotFoundException, UserIsNotAuthenticatedException, AlreadyAddedToRestaurantException {
+        WorkerDTO worker = workerService.addWorker(workerEmail);
         return ResponseEntity.ok(worker);
     }
 
     @PreAuthorize("hasRole('ROLE_RESTADMIN')")
     @PutMapping(EndpointConstants.WORKER_RESOURCE)
-    public ResponseEntity<WorkerDTO> updateWorker(@RequestBody WorkerDTO workerDTO) {
+    public ResponseEntity<WorkerDTO> updateWorker(@RequestBody WorkerDTO workerDTO) throws UserNotFoundException {
         // This method is only for adding/removing ROLE_RESTADMIN to user
         WorkerDTO worker = workerService.updateWorkerRoles(workerDTO);
         return ResponseEntity.ok(worker);
@@ -55,8 +56,8 @@ class WorkerController {
 
     @PreAuthorize("hasRole('ROLE_RESTADMIN')")
     @DeleteMapping(EndpointConstants.WORKER_RESOURCE)
-    public ResponseEntity<String> deleteWorker(@RequestBody UserDTO userDTO) {
-        workerService.deleteWorker(userDTO);
+    public ResponseEntity<String> deleteWorker(@RequestBody String workerEmail) throws UserNotFoundException {
+        workerService.deleteWorker(workerEmail);
         return ResponseEntity.ok("Worker is deleted successfully");
     }
 

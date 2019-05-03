@@ -37,7 +37,6 @@ public class CreditCardService {
                 .creditCardListTocreditCardDTOList(
                         creditCardRepository.findAllByCustomerId(
                                 userService.getCurrentUser(SecurityUtils.getCurrentUserLogin())
-                                        .orElseThrow(() -> new UserIsNotAuthenticatedException("User not found."))
                                         .getCustomerUser().getId())
                                 .orElse(Collections.emptyList()));
 
@@ -53,7 +52,6 @@ public class CreditCardService {
         CreditCard card = mapper.creditCardDTOTocreditCard(cardDTO);
         card.setCustomer(
                 userService.getCurrentUser(SecurityUtils.getCurrentUserLogin())
-                        .orElseThrow(() -> new UserIsNotAuthenticatedException("User not found."))
                         .getCustomerUser());
         card.setCreationDate(LocalDateTime.now());
         return mapper.creditCardTocreditCardDTO(creditCardRepository.save(card));
@@ -67,7 +65,7 @@ public class CreditCardService {
      */
     public CreditCardDTO updateCard(CreditCardDTO cardDTO) throws UserIsNotAuthenticatedException {
 
-       checkIfUserHasSpecifiedCreditCard(cardDTO);
+        checkIfUserHasSpecifiedCreditCard(cardDTO);
         return mapper
                 .creditCardTocreditCardDTO(
                         creditCardRepository.save(
@@ -92,12 +90,11 @@ public class CreditCardService {
                 creditCardRepository.findAllByCustomerId(
                         userService
                                 .getCurrentUser(SecurityUtils.getCurrentUserLogin())
-                                .orElseThrow(() -> new UserIsNotAuthenticatedException("User not found."))
                                 .getCustomerUser().getId())
                         .orElse(Collections.emptyList());
 
 
-        if(!userCards.contains(mapper.creditCardDTOTocreditCard(cardDTO)))
+        if (!userCards.contains(mapper.creditCardDTOTocreditCard(cardDTO)))
             throw new AccessDeniedException("Card not found.");
     }
 

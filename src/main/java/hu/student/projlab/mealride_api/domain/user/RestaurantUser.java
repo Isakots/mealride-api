@@ -34,4 +34,8 @@ public class RestaurantUser {
     public void setRestaurant(Restaurant restaurant) {
         this.restaurant = restaurant;
     }
+
+    public SpringUser getSpringUser() {
+        return springUser;
+    }
 }

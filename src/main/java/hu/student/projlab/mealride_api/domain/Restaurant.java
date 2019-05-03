@@ -2,6 +2,7 @@ package hu.student.projlab.mealride_api.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import hu.student.projlab.mealride_api.domain.user.CustomerUser;
+import hu.student.projlab.mealride_api.domain.user.RestaurantUser;
 
 import javax.persistence.*;
 import java.util.List;
@@ -38,7 +39,7 @@ public class Restaurant extends AbstractEntity {
             joinColumns = {@JoinColumn(name = "RESTAURANT_ID")},
             inverseJoinColumns = {@JoinColumn(name = "WORKER_ID")})
     @Column(name = "WORKER_ID")
-    private List<CustomerUser> workers;
+    private List<RestaurantUser> workers;
 
     @JsonIgnore
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
@@ -115,11 +116,11 @@ public class Restaurant extends AbstractEntity {
         this.menu = menu;
     }
 
-    public List<CustomerUser> getWorkers() {
+    public List<RestaurantUser> getWorkers() {
         return workers;
     }
 
-    public void setWorkers(List<CustomerUser> workers) {
+    public void setWorkers(List<RestaurantUser> workers) {
         this.workers = workers;
     }
 

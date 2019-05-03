@@ -30,7 +30,6 @@ public class DeliveryAddressService {
     public List<DeliveryAddress> findAll() throws UserIsNotAuthenticatedException {
         return deliveryAddressRepository.findAllByCustomerId(
                 userService.getCurrentUser(SecurityUtils.getCurrentUserLogin())
-                        .orElseThrow(() -> new UserIsNotAuthenticatedException("User not found."))
                         .getCustomerUser().getId())
                 .orElse(Collections.emptyList());
     }
@@ -44,7 +43,6 @@ public class DeliveryAddressService {
     public DeliveryAddress addAddress(DeliveryAddress address) throws UserIsNotAuthenticatedException {
         address.setCustomer(
                 userService.getCurrentUser(SecurityUtils.getCurrentUserLogin())
-                        .orElseThrow(() -> new UserIsNotAuthenticatedException("User not found."))
                         .getCustomerUser());
 
         address.setCreationDate(LocalDateTime.now());
@@ -79,11 +77,10 @@ public class DeliveryAddressService {
         List<DeliveryAddress> userAddresses =
                 deliveryAddressRepository.findAllByCustomerId(
                         userService.getCurrentUser(SecurityUtils.getCurrentUserLogin())
-                                .orElseThrow(() -> new UserIsNotAuthenticatedException("User not found."))
                                 .getCustomerUser().getId())
                         .orElse(Collections.emptyList());
 
-        if(!userAddresses.contains(address))
+        if (!userAddresses.contains(address))
             throw new AccessDeniedException("Address not found.");
     }
 

@@ -2,6 +2,7 @@ package hu.student.projlab.mealride_api.service;
 
 
 import hu.student.projlab.mealride_api.domain.user.SpringUser;
+import hu.student.projlab.mealride_api.exception.UserIsNotAuthenticatedException;
 import hu.student.projlab.mealride_api.repository.RoleRepository;
 import hu.student.projlab.mealride_api.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,7 +45,11 @@ public class UserService {
      *
      * @return the database CustomerUser of the current login
      */
-    public Optional<SpringUser> getCurrentUser(Optional<String> email) {
-        return userRepository.findByUsername(email.get());
+    public SpringUser getCurrentUser(Optional<String> email) throws UserIsNotAuthenticatedException {
+        return userRepository.findByUsername(email.get()).orElseThrow(UserIsNotAuthenticatedException::new);
+    }
+
+    public void save(SpringUser springUser) {
+        userRepository.save(springUser);
     }
 }
