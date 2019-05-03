@@ -32,8 +32,7 @@ public class MealService {
 
     public List<Meal> findAll() {
         // should i ask for it this way or with a native SQL query?
-        return userService.getCurrentUser(SecurityUtils.getCurrentUserLogin())
-                .getRestaurantUser().getRestaurant().getMenu();
+        return findRestaurantWithCurrentUser().getMenu();
         // can it be nullreference ?
     }
 

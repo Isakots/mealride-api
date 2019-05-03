@@ -2,54 +2,58 @@ package hu.student.projlab.mealride_api.domain;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import hu.student.projlab.mealride_api.domain.converter.LocalDateTimeAttributeConverter;
 import hu.student.projlab.mealride_api.domain.user.CustomerUser;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
-@Table(name="ORDERS")
-public class Order extends AbstractEntity{
+@Table(name = "ORDERS")
+public class Order extends AbstractEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name="ORDER_ID")
+    @Column(name = "ORDER_ID")
     private Long id;
 
     @JsonIgnore
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinTable(name="CUSTOMER_ORDERS", joinColumns = { @JoinColumn(name="ORDER_ID")},
-            inverseJoinColumns = { @JoinColumn(name="CUSTOMER_ID")})
+    @JoinTable(name = "CUSTOMER_ORDERS", joinColumns = {@JoinColumn(name = "ORDER_ID")},
+            inverseJoinColumns = {@JoinColumn(name = "CUSTOMER_ID")})
     private CustomerUser customer;
 
     @JsonIgnore
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinTable(name="RESTAURANT_ORDERS", joinColumns = { @JoinColumn(name="ORDER_ID")},
-            inverseJoinColumns = { @JoinColumn(name="RESTAURANT_ID")})
+    @JoinTable(name = "RESTAURANT_ORDERS", joinColumns = {@JoinColumn(name = "ORDER_ID")},
+            inverseJoinColumns = {@JoinColumn(name = "RESTAURANT_ID")})
     private Restaurant restaurant;
 
     @OneToMany(cascade = CascadeType.ALL)
-    @JoinTable(name="ORDER_MEALS", joinColumns = { @JoinColumn(name="ORDER_ID")},
-            inverseJoinColumns = { @JoinColumn(name="CARTITEM_ID")})
+    @JoinTable(name = "ORDER_MEALS", joinColumns = {@JoinColumn(name = "ORDER_ID")},
+            inverseJoinColumns = {@JoinColumn(name = "CARTITEM_ID")})
     private List<CartItem> meals;
 
     @OneToOne
-    @JoinColumn(name="ADDRESS_ID")
+    @JoinColumn(name = "ADDRESS_ID")
     private DeliveryAddress address;
     @OneToOne
-    @JoinColumn(name="CARD_ID")
+    @JoinColumn(name = "CARD_ID")
     private CreditCard card;
-    @Column(name="PRICE")
+    @Column(name = "PRICE")
     private int price;
-    @Column(name="ORDER_TIME")
-    private Long datetime;
-    @Column(name="COURIER_NAME")
+    @JsonIgnore
+    @Convert(converter = LocalDateTimeAttributeConverter.class)
+    @Column(name = "ORDER_TIME")
+    private LocalDateTime ordertime;
+    @Column(name = "COURIER_NAME")
     private String couriername;
-    @Column(name="CUSTOMER_COMMENT")
+    @Column(name = "CUSTOMER_COMMENT")
     private String usercomment;
-    @Column(name="WORKER_COMMENT")
+    @Column(name = "WORKER_COMMENT")
     private String restaurantcomment;
-    @Column(name="STATUS")
+    @Column(name = "STATUS")
     private Status status;  // enum type State
 
 
@@ -112,13 +116,12 @@ public class Order extends AbstractEntity{
         this.price = price;
     }
 
-    public Long getDatetime() {
-        return datetime;
+    public LocalDateTime getOrdertime() {
+        return ordertime;
     }
 
-    public void setDatetime(Long datetime) {
-
-        this.datetime = datetime;
+    public void setOrdertime(LocalDateTime ordertime) {
+        this.ordertime = ordertime;
     }
 
     public String getCouriername() {

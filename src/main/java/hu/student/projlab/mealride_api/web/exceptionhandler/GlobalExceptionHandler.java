@@ -1,10 +1,8 @@
 package hu.student.projlab.mealride_api.web.exceptionhandler;
 
 import com.google.gson.Gson;
-import hu.student.projlab.mealride_api.exception.AlreadyAddedToRestaurantException;
-import hu.student.projlab.mealride_api.exception.InvalidDataException;
-import hu.student.projlab.mealride_api.exception.RestaurantNotFoundException;
-import hu.student.projlab.mealride_api.exception.UserIsNotAuthenticatedException;
+import hu.student.projlab.mealride_api.domain.Order;
+import hu.student.projlab.mealride_api.exception.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
@@ -46,6 +44,11 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(RestaurantNotFoundException.class)
     protected ResponseEntity<?> handleRestaurantNotFound(RestaurantNotFoundException e) {
         return new ResponseEntity<>(wrapMessageToJSON(e.getMessage()), null, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(OrderException.class)
+    protected ResponseEntity<?> handleOrderFailure(OrderException e) {
+        return new ResponseEntity<>(wrapMessageToJSON(e.getMessage()), null, HttpStatus.BAD_REQUEST);
     }
 
     private String wrapMessageToJSON(String message) {

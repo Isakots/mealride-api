@@ -8,6 +8,7 @@ import hu.student.projlab.mealride_api.domain.user.CustomerUser;
 import javax.persistence.*;
 import javax.validation.constraints.Pattern;
 import java.time.LocalDate;
+import java.util.Objects;
 
 @Entity
 @Table(name="CARD")
@@ -39,6 +40,24 @@ public class CreditCard extends AbstractEntity{
     private CustomerUser customer;
 
     public CreditCard() {
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        CreditCard that = (CreditCard) o;
+        return id.equals(that.id) &&
+                number.equals(that.number) &&
+                ownername.equals(that.ownername) &&
+                expriationdate.equals(that.expriationdate) &&
+                cvc.equals(that.cvc) &&
+                customer.equals(that.customer);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, number, ownername, expriationdate, cvc, customer);
     }
 
     public Long getId() {
