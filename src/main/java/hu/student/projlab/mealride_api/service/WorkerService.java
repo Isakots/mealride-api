@@ -10,7 +10,6 @@ import hu.student.projlab.mealride_api.exception.InvalidDataException;
 import hu.student.projlab.mealride_api.exception.UserIsNotAuthenticatedException;
 import hu.student.projlab.mealride_api.exception.UserNotFoundException;
 import hu.student.projlab.mealride_api.repository.RestaurantRepository;
-import hu.student.projlab.mealride_api.service.dto.UserDTO;
 import hu.student.projlab.mealride_api.service.dto.WorkerDTO;
 import hu.student.projlab.mealride_api.service.mapper.WorkerMapper;
 import org.springframework.beans.factory.annotation.Autowired;

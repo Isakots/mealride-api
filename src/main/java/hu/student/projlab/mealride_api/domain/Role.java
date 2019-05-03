@@ -26,6 +26,11 @@ public class Role implements GrantedAuthority {
         return Objects.equals(role, role1.role);
     }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(role);
+    }
+
     public Role(String role) {
         this.role = role;
     }

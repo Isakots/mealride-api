@@ -2,8 +2,7 @@ package hu.student.projlab.mealride_api.web;
 
 
 import hu.student.projlab.mealride_api.domain.Meal;
-import hu.student.projlab.mealride_api.service.RestaurantService;
-import hu.student.projlab.mealride_api.service.UserService;
+import hu.student.projlab.mealride_api.service.MealService;
 import hu.student.projlab.mealride_api.util.EndpointConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -14,52 +13,41 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.List;
 
-import static org.springframework.http.HttpStatus.BAD_REQUEST;
-
 @RestController
+@PreAuthorize("hasRole('ROLE_RESTWORKER') or hasRole('ROLE_RESTADMIN')")
 @RequestMapping(value = EndpointConstants.RESTAURANT_ENDPOINT)
 class MealController {
 
-    private RestaurantService restaurantService;
-
-    private UserService userService;
+    private MealService mealService;
 
     @Autowired
-    public MealController(RestaurantService restaurantService, UserService userService) {
-        this.restaurantService = restaurantService;
-        this.userService = userService;
+    public MealController(MealService mealService) {
+        this.mealService = mealService;
     }
 
-    @PreAuthorize("hasRole('ROLE_RESTWORKER') or hasRole('ROLE_RESTADMIN')")
     @GetMapping(EndpointConstants.MENU_RESOURCE)
-    public ResponseEntity<List<Meal>>getMenu() {
-        List<Meal> result = .findAll();
+    public ResponseEntity<List<Meal>> getMenu() {
+        List<Meal> result = mealService.findAll();
         return new ResponseEntity<>(
                 result, null, HttpStatus.OK);
     }
 
-    @PreAuthorize("hasRole('ROLE_RESTWORKER') or hasRole('ROLE_RESTADMIN')")
     @PostMapping(EndpointConstants.MENU_RESOURCE)
-    public ResponseEntity<Object> addMeal(
-            @RequestBody @Valid Meal meal) {
-
-        return ResponseEntity.badRequest().body(BAD_REQUEST);
+    public ResponseEntity<Meal> addMeal(@RequestBody @Valid Meal meal) {
+        Meal newMeal = mealService.addMeal(meal);
+        return ResponseEntity.ok(newMeal);
     }
 
-    @PreAuthorize("hasRole('ROLE_RESTWORKER') or hasRole('ROLE_RESTADMIN')")
     @PutMapping(EndpointConstants.MENU_RESOURCE)
-    public ResponseEntity<Object> updateMeal(
-            @RequestBody @Valid Meal meal) {
-
-        return ResponseEntity.badRequest().body(BAD_REQUEST);
+    public ResponseEntity<Object> updateMeal(@RequestBody @Valid Meal meal) {
+        Meal updatedMeal = mealService.updateMeal(meal);
+        return ResponseEntity.ok(updatedMeal);
     }
 
-    @PreAuthorize("hasRole('ROLE_RESTWORKER') or hasRole('ROLE_RESTADMIN')")
-    @DeleteMapping(EndpointConstants.MENU_RESOURCE)
-    public ResponseEntity<Object> deleteMeal(
-            @RequestBody @Valid Meal meal) {
-
-        return ResponseEntity.badRequest().body(BAD_REQUEST);
+    @DeleteMapping(EndpointConstants.MENU_RESOURCE + "/{id}")
+    public ResponseEntity<String> deleteMeal(@PathVariable Long id) {
+        mealService.deleteMeal(id);
+        return ResponseEntity.ok("Meal is deleted successfully");
     }
 
 

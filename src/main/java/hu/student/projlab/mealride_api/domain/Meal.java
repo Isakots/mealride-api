@@ -1,6 +1,8 @@
 package hu.student.projlab.mealride_api.domain;
 
 import javax.persistence.*;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
 import java.util.Objects;
 
@@ -11,10 +13,13 @@ public class Meal extends AbstractEntity implements Serializable {
     @GeneratedValue(strategy= GenerationType.AUTO)
     private Long id;
     @Column(name="MEAL_NAME")
+    @NotBlank
     private String name;
     @Column(name="PRICE")
+    @NotBlank
     private int price;
     @Column(name="MEAL_COMMENT")
+    @Max(200)
     private String comment;
 
     public Meal() {
