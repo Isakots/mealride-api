@@ -7,7 +7,6 @@ import hu.student.projlab.mealride_api.domain.user.RestaurantUser;
 import hu.student.projlab.mealride_api.domain.user.SpringUser;
 import hu.student.projlab.mealride_api.exception.AlreadyAddedToRestaurantException;
 import hu.student.projlab.mealride_api.exception.InvalidDataException;
-import hu.student.projlab.mealride_api.exception.UserIsNotAuthenticatedException;
 import hu.student.projlab.mealride_api.exception.UserNotFoundException;
 import hu.student.projlab.mealride_api.repository.RestaurantRepository;
 import hu.student.projlab.mealride_api.service.dto.WorkerDTO;
@@ -15,10 +14,12 @@ import hu.student.projlab.mealride_api.service.mapper.WorkerMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@Transactional
 public class WorkerService {
 
     private WorkerMapper workerMapper;
@@ -34,7 +35,7 @@ public class WorkerService {
         this.userService = userService;
     }
 
-    public List<WorkerDTO> findAll(Long id) throws UserIsNotAuthenticatedException, InvalidDataException {
+    public List<WorkerDTO> findAll(Long id) throws InvalidDataException {
         if (id != userService.getCurrentUser(SecurityUtils.getCurrentUserLogin())
                 .getRestaurantUser().getRestaurant().getId())
             throw new InvalidDataException();
@@ -50,7 +51,7 @@ public class WorkerService {
     // 4. Set worker to restaurants
     // 5. Add user to Restaurant's workers list
     // 6. Return the new worker data
-    public WorkerDTO addWorker(String email) throws UserNotFoundException, UserIsNotAuthenticatedException, AlreadyAddedToRestaurantException {
+    public WorkerDTO addWorker(String email) throws UserNotFoundException, AlreadyAddedToRestaurantException {
         SpringUser springUser = findSpringUserWithEmail(email);
         if (springUser.getRestaurantUser() == null)
             springUser.setRestaurantUser(new RestaurantUser());
@@ -87,7 +88,7 @@ public class WorkerService {
         restaurantRepository.save(restaurant);
         springUser.getRestaurantUser().setRestaurant(null);
         springUser.getRoles().remove(new Role("ROLE_RESTWORKER"));
-        if(springUser.getRoles().contains(new Role("ROLE_RESTADMIN")))
+        if (springUser.getRoles().contains(new Role("ROLE_RESTADMIN")))
             springUser.getRoles().remove(new Role("ROLE_RESTADMIN"));
 
         userService.save(springUser);

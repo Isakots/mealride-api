@@ -2,7 +2,6 @@ package hu.student.projlab.mealride_api.service;
 
 import hu.student.projlab.mealride_api.config.security.SecurityUtils;
 import hu.student.projlab.mealride_api.domain.DeliveryAddress;
-import hu.student.projlab.mealride_api.exception.UserIsNotAuthenticatedException;
 import hu.student.projlab.mealride_api.repository.DeliveryAddressRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.AccessDeniedException;
@@ -27,7 +26,7 @@ public class DeliveryAddressService {
         this.userService = userService;
     }
 
-    public List<DeliveryAddress> findAll() throws UserIsNotAuthenticatedException {
+    public List<DeliveryAddress> findAll() {
         return deliveryAddressRepository.findAllByCustomerId(
                 userService.getCurrentUser(SecurityUtils.getCurrentUserLogin())
                         .getCustomerUser().getId())
@@ -40,7 +39,7 @@ public class DeliveryAddressService {
      * @param address The address which needs to be persisted
      * @return The new address with generated ID
      */
-    public DeliveryAddress addAddress(DeliveryAddress address) throws UserIsNotAuthenticatedException {
+    public DeliveryAddress addAddress(DeliveryAddress address) {
         address.setCustomer(
                 userService.getCurrentUser(SecurityUtils.getCurrentUserLogin())
                         .getCustomerUser());
@@ -55,7 +54,7 @@ public class DeliveryAddressService {
      * @param address Address which needs to be updated.
      * @return The address with updated values
      */
-    public DeliveryAddress updateAddress(DeliveryAddress address) throws UserIsNotAuthenticatedException {
+    public DeliveryAddress updateAddress(DeliveryAddress address) {
         checkIfUserHasSpecifiedAddress(address);
         return deliveryAddressRepository.save(address);
     }
@@ -65,7 +64,7 @@ public class DeliveryAddressService {
      *
      * @param id ID of the address
      */
-    public void deleteAddress(Long id) throws UserIsNotAuthenticatedException {
+    public void deleteAddress(Long id) {
         DeliveryAddress address = deliveryAddressRepository.findById(id).get();
         checkIfUserHasSpecifiedAddress(address);
         address.setCustomer(null);
@@ -73,7 +72,7 @@ public class DeliveryAddressService {
         deliveryAddressRepository.save(address);
     }
 
-    private void checkIfUserHasSpecifiedAddress(DeliveryAddress address) throws UserIsNotAuthenticatedException {
+    private void checkIfUserHasSpecifiedAddress(DeliveryAddress address) {
         List<DeliveryAddress> userAddresses =
                 deliveryAddressRepository.findAllByCustomerId(
                         userService.getCurrentUser(SecurityUtils.getCurrentUserLogin())

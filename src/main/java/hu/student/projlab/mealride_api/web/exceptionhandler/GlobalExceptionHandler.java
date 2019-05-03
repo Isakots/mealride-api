@@ -3,6 +3,7 @@ package hu.student.projlab.mealride_api.web.exceptionhandler;
 import com.google.gson.Gson;
 import hu.student.projlab.mealride_api.exception.AlreadyAddedToRestaurantException;
 import hu.student.projlab.mealride_api.exception.InvalidDataException;
+import hu.student.projlab.mealride_api.exception.RestaurantNotFoundException;
 import hu.student.projlab.mealride_api.exception.UserIsNotAuthenticatedException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +15,8 @@ import java.util.NoSuchElementException;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
+
+    // TODO maybe the exceptions should be refactored as RuntimeExceptions? find out!
 
     @ExceptionHandler(NoSuchElementException.class)
     protected ResponseEntity<?> handleElementNotFound() {
@@ -38,6 +41,11 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(AlreadyAddedToRestaurantException.class)
     protected ResponseEntity<?> handleAlreadyAddedToRestaurant(AlreadyAddedToRestaurantException e) {
         return new ResponseEntity<>(wrapMessageToJSON(e.getMessage()), null, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(RestaurantNotFoundException.class)
+    protected ResponseEntity<?> handleRestaurantNotFound(RestaurantNotFoundException e) {
+        return new ResponseEntity<>(wrapMessageToJSON(e.getMessage()), null, HttpStatus.NOT_FOUND);
     }
 
     private String wrapMessageToJSON(String message) {

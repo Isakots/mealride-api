@@ -1,7 +1,6 @@
 package hu.student.projlab.mealride_api.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import hu.student.projlab.mealride_api.domain.user.CustomerUser;
 import hu.student.projlab.mealride_api.domain.user.RestaurantUser;
 
 import javax.persistence.*;
@@ -26,7 +25,7 @@ public class Restaurant extends AbstractEntity {
     @Embedded
     private ShoppingHours hours;
 
-    @ElementCollection
+    @OneToMany
     @JoinTable(name = "MENU",
             joinColumns = {@JoinColumn(name = "RESTAURANT_ID")},
             inverseJoinColumns = {@JoinColumn(name = "MEAL_ID")})

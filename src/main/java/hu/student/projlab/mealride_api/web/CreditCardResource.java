@@ -1,7 +1,6 @@
 package hu.student.projlab.mealride_api.web;
 
 import hu.student.projlab.mealride_api.exception.InvalidDataException;
-import hu.student.projlab.mealride_api.exception.UserIsNotAuthenticatedException;
 import hu.student.projlab.mealride_api.service.CreditCardService;
 import hu.student.projlab.mealride_api.service.dto.CreditCardDTO;
 import hu.student.projlab.mealride_api.util.EndpointConstants;
@@ -13,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.List;
 
 
@@ -28,7 +28,7 @@ class CreditCardResource {
     }
 
     @GetMapping
-    public ResponseEntity<List<CreditCardDTO>> getCards() throws UserIsNotAuthenticatedException {
+    public ResponseEntity<List<CreditCardDTO>> getCards() {
         List<CreditCardDTO> result = creditCardService.findAll();
         return new ResponseEntity<>(
                 result, null, HttpStatus.OK);
@@ -36,7 +36,7 @@ class CreditCardResource {
 
     @PostMapping
     public ResponseEntity<CreditCardDTO> addCard(
-            @RequestBody @Valid CreditCardDTO creditCard) throws Exception {
+            @RequestBody @Valid CreditCardDTO creditCard) throws URISyntaxException, InvalidDataException {
 
         if (creditCard.getId() != null)
             throw new InvalidDataException();
@@ -50,7 +50,7 @@ class CreditCardResource {
 
     @PutMapping
     public ResponseEntity<CreditCardDTO> updateCard(
-            @RequestBody @Valid CreditCardDTO creditCard) throws UserIsNotAuthenticatedException {
+            @RequestBody @Valid CreditCardDTO creditCard) {
 
         if (creditCard.getId() == null)
             return ResponseEntity.notFound()
@@ -66,7 +66,7 @@ class CreditCardResource {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteCard(@PathVariable Long id) throws UserIsNotAuthenticatedException {
+    public ResponseEntity<Void> deleteCard(@PathVariable Long id) {
         creditCardService.deleteCard(id);
         return ResponseEntity
                 .ok()

@@ -2,6 +2,7 @@ package hu.student.projlab.mealride_api.web;
 
 
 import hu.student.projlab.mealride_api.domain.Meal;
+import hu.student.projlab.mealride_api.exception.InvalidDataException;
 import hu.student.projlab.mealride_api.service.MealService;
 import hu.student.projlab.mealride_api.util.EndpointConstants;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,12 +17,12 @@ import java.util.List;
 @RestController
 @PreAuthorize("hasRole('ROLE_RESTWORKER') or hasRole('ROLE_RESTADMIN')")
 @RequestMapping(value = EndpointConstants.RESTAURANT_ENDPOINT)
-class MealController {
+class MealResource {
 
     private MealService mealService;
 
     @Autowired
-    public MealController(MealService mealService) {
+    public MealResource(MealService mealService) {
         this.mealService = mealService;
     }
 
@@ -33,13 +34,15 @@ class MealController {
     }
 
     @PostMapping(EndpointConstants.MENU_RESOURCE)
-    public ResponseEntity<Meal> addMeal(@RequestBody @Valid Meal meal) {
+    public ResponseEntity<Meal> addMeal(@RequestBody @Valid Meal meal) throws InvalidDataException {
+        if (meal.getId() != null)
+            throw new InvalidDataException();
         Meal newMeal = mealService.addMeal(meal);
         return ResponseEntity.ok(newMeal);
     }
 
     @PutMapping(EndpointConstants.MENU_RESOURCE)
-    public ResponseEntity<Object> updateMeal(@RequestBody @Valid Meal meal) {
+    public ResponseEntity<Meal> updateMeal(@RequestBody @Valid Meal meal) {
         Meal updatedMeal = mealService.updateMeal(meal);
         return ResponseEntity.ok(updatedMeal);
     }

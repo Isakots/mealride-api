@@ -3,7 +3,6 @@ package hu.student.projlab.mealride_api.web;
 
 import hu.student.projlab.mealride_api.exception.AlreadyAddedToRestaurantException;
 import hu.student.projlab.mealride_api.exception.InvalidDataException;
-import hu.student.projlab.mealride_api.exception.UserIsNotAuthenticatedException;
 import hu.student.projlab.mealride_api.exception.UserNotFoundException;
 import hu.student.projlab.mealride_api.service.WorkerService;
 import hu.student.projlab.mealride_api.service.dto.WorkerDTO;
@@ -19,18 +18,18 @@ import java.util.List;
 @RestController
 @PreAuthorize("hasRole('ROLE_RESTADMIN')")
 @RequestMapping(value = EndpointConstants.RESTAURANT_ENDPOINT)
-class WorkerController {
+class WorkerResource {
 
     private WorkerService workerService;
 
     @Autowired
-    public WorkerController(WorkerService workerService) {
+    public WorkerResource(WorkerService workerService) {
         this.workerService = workerService;
     }
 
     //    @PreAuthorize("hasRole('ROLE_RESTADMIN')")
     @GetMapping(EndpointConstants.WORKER_RESOURCE)
-    public ResponseEntity<List<WorkerDTO>> getWorkers(@RequestParam Long id) throws InvalidDataException, UserIsNotAuthenticatedException {
+    public ResponseEntity<List<WorkerDTO>> getWorkers(@RequestParam Long id) throws InvalidDataException {
         List<WorkerDTO> result = workerService.findAll(id);
         return new ResponseEntity<>(
                 result, null, HttpStatus.OK);
@@ -38,7 +37,7 @@ class WorkerController {
 
     //  @PreAuthorize("hasRole('ROLE_RESTADMIN')")
     @PostMapping(EndpointConstants.WORKER_RESOURCE)
-    public ResponseEntity<WorkerDTO> addWorker(@RequestBody String workerEmail) throws UserNotFoundException, UserIsNotAuthenticatedException, AlreadyAddedToRestaurantException {
+    public ResponseEntity<WorkerDTO> addWorker(@RequestBody String workerEmail) throws UserNotFoundException, AlreadyAddedToRestaurantException {
         WorkerDTO worker = workerService.addWorker(workerEmail);
         return ResponseEntity.ok(worker);
     }

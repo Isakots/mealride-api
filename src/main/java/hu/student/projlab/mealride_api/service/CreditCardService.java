@@ -2,7 +2,6 @@ package hu.student.projlab.mealride_api.service;
 
 import hu.student.projlab.mealride_api.config.security.SecurityUtils;
 import hu.student.projlab.mealride_api.domain.CreditCard;
-import hu.student.projlab.mealride_api.exception.UserIsNotAuthenticatedException;
 import hu.student.projlab.mealride_api.repository.CreditCardRepository;
 import hu.student.projlab.mealride_api.service.dto.CreditCardDTO;
 import hu.student.projlab.mealride_api.service.mapper.CreditCardMapper;
@@ -32,7 +31,7 @@ public class CreditCardService {
         this.userService = userService;
     }
 
-    public List<CreditCardDTO> findAll() throws UserIsNotAuthenticatedException {
+    public List<CreditCardDTO> findAll() {
         return mapper
                 .creditCardListTocreditCardDTOList(
                         creditCardRepository.findAllByCustomerId(
@@ -48,7 +47,7 @@ public class CreditCardService {
      * @param cardDTO Credit card which needs to be persisted.
      * @return The new credit card with generated ID
      */
-    public CreditCardDTO addCard(CreditCardDTO cardDTO) throws UserIsNotAuthenticatedException {
+    public CreditCardDTO addCard(CreditCardDTO cardDTO) {
         CreditCard card = mapper.creditCardDTOTocreditCard(cardDTO);
         card.setCustomer(
                 userService.getCurrentUser(SecurityUtils.getCurrentUserLogin())
@@ -63,7 +62,7 @@ public class CreditCardService {
      * @param cardDTO Credit card which needs to be updated.
      * @return The credit card with updated values
      */
-    public CreditCardDTO updateCard(CreditCardDTO cardDTO) throws UserIsNotAuthenticatedException {
+    public CreditCardDTO updateCard(CreditCardDTO cardDTO) {
 
         checkIfUserHasSpecifiedCreditCard(cardDTO);
         return mapper
@@ -77,7 +76,7 @@ public class CreditCardService {
      *
      * @param id ID of the credit card
      */
-    public void deleteCard(Long id) throws UserIsNotAuthenticatedException {
+    public void deleteCard(Long id) {
         CreditCard card = creditCardRepository.findById(id).get();
         checkIfUserHasSpecifiedCreditCard(mapper.creditCardTocreditCardDTO(card));
         card.setCustomer(null);
@@ -85,7 +84,7 @@ public class CreditCardService {
         creditCardRepository.save(card);
     }
 
-    private void checkIfUserHasSpecifiedCreditCard(CreditCardDTO cardDTO) throws UserIsNotAuthenticatedException {
+    private void checkIfUserHasSpecifiedCreditCard(CreditCardDTO cardDTO) {
         List<CreditCard> userCards =
                 creditCardRepository.findAllByCustomerId(
                         userService

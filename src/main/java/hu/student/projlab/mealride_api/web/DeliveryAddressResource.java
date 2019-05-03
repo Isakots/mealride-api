@@ -13,7 +13,9 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @RestController
 @RequestMapping(value = EndpointConstants.USER_ENDPOINT + EndpointConstants.ADDRESS_RESOURCE)
@@ -27,7 +29,7 @@ class DeliveryAddressResource {
     }
 
     @GetMapping
-    public ResponseEntity<List<DeliveryAddress>> getAddresses() throws UserIsNotAuthenticatedException {
+    public ResponseEntity<List<DeliveryAddress>> getAddresses() {
 
         List<DeliveryAddress> result = deliveryAddressService.findAll();
         return new ResponseEntity<>(
@@ -36,10 +38,10 @@ class DeliveryAddressResource {
 
     @PostMapping
     public ResponseEntity<DeliveryAddress> addAddress
-            (@RequestBody @Valid DeliveryAddress address) throws Exception {
+            (@RequestBody @Valid DeliveryAddress address) throws URISyntaxException {
 
-        if(address.getId() != null)
-            throw new Exception();
+        if (address.getId() != null)
+            throw new NoSuchElementException();
         // TODO: Create an exceptionhandler class and an Exception type for this.
 
         DeliveryAddress newAddress = deliveryAddressService.addAddress(address);
@@ -51,11 +53,11 @@ class DeliveryAddressResource {
 
     @PutMapping
     public ResponseEntity<DeliveryAddress> updateAddress(
-            @RequestBody @Valid DeliveryAddress address) throws UserIsNotAuthenticatedException {
-        if(address.getId() == null)
+            @RequestBody @Valid DeliveryAddress address) {
+        if (address.getId() == null)
             return ResponseEntity.notFound()
                     .headers(HeaderUtil.createAlert(
-                    "Address not found",null))
+                            "Address not found", null))
                     .build();
 
         DeliveryAddress result = deliveryAddressService.updateAddress(address);
@@ -79,4 +81,4 @@ class DeliveryAddressResource {
         return new ResponseEntity<>(e.getMessage(), null, HttpStatus.NOT_FOUND);
     }
 
- }
+}

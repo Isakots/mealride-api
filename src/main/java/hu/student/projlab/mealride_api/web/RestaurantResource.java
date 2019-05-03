@@ -3,6 +3,7 @@ package hu.student.projlab.mealride_api.web;
 
 import hu.student.projlab.mealride_api.domain.Restaurant;
 import hu.student.projlab.mealride_api.exception.InvalidDataException;
+import hu.student.projlab.mealride_api.exception.RestaurantNotFoundException;
 import hu.student.projlab.mealride_api.service.RestaurantService;
 import hu.student.projlab.mealride_api.service.UserService;
 import hu.student.projlab.mealride_api.util.EndpointConstants;
@@ -70,7 +71,7 @@ class RestaurantResource {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Object> deleteRestaurant(@RequestBody @Valid Long id) {
+    public ResponseEntity<Object> deleteRestaurant(@RequestBody @Valid Long id) throws RestaurantNotFoundException {
         restaurantService.deleteRestaurant(id);
         return ResponseEntity
                 .ok()

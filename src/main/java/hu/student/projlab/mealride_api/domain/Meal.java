@@ -10,15 +10,15 @@ import java.util.Objects;
 public class Meal extends AbstractEntity implements Serializable {
 
     @Id
-    @GeneratedValue(strategy= GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    @Column(name="MEAL_NAME")
+    @Column(name = "MEAL_NAME")
     @NotBlank
     private String name;
-    @Column(name="PRICE")
+    @Column(name = "PRICE")
     @NotBlank
     private int price;
-    @Column(name="MEAL_COMMENT")
+    @Column(name = "MEAL_COMMENT")
     @Max(200)
     private String comment;
 
