@@ -3,6 +3,7 @@ package hu.student.projlab.mealride_api;
 import com.google.gson.Gson;
 import hu.student.projlab.mealride_api.service.dto.SignUpForm;
 import hu.student.projlab.mealride_api.service.dto.UserDTO;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -24,7 +25,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class AuthenticationTests {
 
     private final UserDTO userWithAllCredentials = new UserDTO("example@mealride.com", "123456");
-    private final SignUpForm formNotRegistered = new SignUpForm("example@mealride.comm", "123456",
+    private final SignUpForm formNotRegistered = new SignUpForm(generateRandomEmail(), "123456",
             "Marcell", "Csokasi", "301234567", "1356", "Szeged", "Béka u.",
             "Csongrád megye", (short) 20, null, null);
     private final SignUpForm formAlreadyRegistered = new SignUpForm("example@mealride.com", "123456",
@@ -68,6 +69,12 @@ public class AuthenticationTests {
                 .content(new Gson().toJson(this.formAlreadyRegistered)))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("message", equalTo("Fail -> Username is already taken!")));
+    }
+
+    private String generateRandomEmail() {
+        String generatedString1 = RandomStringUtils.randomAlphabetic(10);
+        String generatedString2 = RandomStringUtils.randomAlphabetic(10);
+        return generatedString1 + "@" + generatedString2 + ".hu";
     }
 
 }
