@@ -29,7 +29,7 @@ import java.time.LocalDateTime;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
-class AuthController {
+public class AuthController {
 
     @Autowired
     AuthenticationManager authenticationManager;
