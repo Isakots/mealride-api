@@ -76,9 +76,4 @@ class DeliveryAddressResource {
                 .build();
     }
 
-    @ExceptionHandler(UserIsNotAuthenticatedException.class)
-    protected ResponseEntity<?> handleUserNotAuthenticated(UserIsNotAuthenticatedException e) {
-        return new ResponseEntity<>(e.getMessage(), null, HttpStatus.NOT_FOUND);
-    }
-
 }

@@ -3,6 +3,7 @@ package hu.student.projlab.mealride_api.service.dto;
 import java.io.Serializable;
 
 public class RestaurantDTO implements Serializable {
+    private Long id;
     private String name;
     private String avgdeliverytime;
     private Short minorderprice;
@@ -10,7 +11,12 @@ public class RestaurantDTO implements Serializable {
     private String openingtime;
     private String closingtime;
 
-    public RestaurantDTO() {
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getName() {

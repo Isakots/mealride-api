@@ -27,7 +27,6 @@ class WorkerResource {
         this.workerService = workerService;
     }
 
-    //    @PreAuthorize("hasRole('ROLE_RESTADMIN')")
     @GetMapping(EndpointConstants.WORKER_RESOURCE)
     public ResponseEntity<List<WorkerDTO>> getWorkers(@RequestParam Long id) throws InvalidDataException {
         List<WorkerDTO> result = workerService.findAll(id);
@@ -35,21 +34,18 @@ class WorkerResource {
                 result, null, HttpStatus.OK);
     }
 
-    //  @PreAuthorize("hasRole('ROLE_RESTADMIN')")
     @PostMapping(EndpointConstants.WORKER_RESOURCE)
     public ResponseEntity<WorkerDTO> addWorker(@RequestBody String workerEmail) throws UserNotFoundException, AlreadyAddedToRestaurantException {
         WorkerDTO worker = workerService.addWorker(workerEmail);
         return ResponseEntity.ok(worker);
     }
 
-    // @PreAuthorize("hasRole('ROLE_RESTADMIN')")
     @PutMapping(EndpointConstants.WORKER_RESOURCE)
     public ResponseEntity<WorkerDTO> updateWorker(@RequestBody WorkerDTO workerDTO) throws UserNotFoundException {
         WorkerDTO worker = workerService.updateWorkerRoles(workerDTO);
         return ResponseEntity.ok(worker);
     }
 
-    // @PreAuthorize("hasRole('ROLE_RESTADMIN')")
     @DeleteMapping(EndpointConstants.WORKER_RESOURCE)
     public ResponseEntity<String> deleteWorker(@RequestBody String workerEmail) throws UserNotFoundException {
         workerService.deleteWorker(workerEmail);

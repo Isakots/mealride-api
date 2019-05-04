@@ -6,11 +6,13 @@ import hu.student.projlab.mealride_api.exception.InvalidDataException;
 import hu.student.projlab.mealride_api.exception.RestaurantNotFoundException;
 import hu.student.projlab.mealride_api.service.RestaurantService;
 import hu.student.projlab.mealride_api.service.UserService;
+import hu.student.projlab.mealride_api.service.dto.RestaurantDTO;
 import hu.student.projlab.mealride_api.util.EndpointConstants;
 import hu.student.projlab.mealride_api.util.HeaderUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -19,6 +21,7 @@ import java.net.URISyntaxException;
 import java.util.List;
 
 @RestController
+@PreAuthorize("hasRole('ROLE_ADMIN')")
 @RequestMapping(value = EndpointConstants.ADMIN_ENDPOINT + EndpointConstants.RESTAURANT_RESOURCE)
 class RestaurantResource {
 
@@ -40,13 +43,13 @@ class RestaurantResource {
     }
 
     @PostMapping
-    public ResponseEntity<Restaurant> addRestaurant(
-            @RequestBody @Valid Restaurant restaurant) throws InvalidDataException, URISyntaxException {
+    public ResponseEntity<Restaurant> addRestaurant(@RequestBody @Valid RestaurantDTO restaurantDTO)
+            throws URISyntaxException, InvalidDataException {
 
-        if (restaurant.getId() != null)
+        if (restaurantDTO.getId() != null)
             throw new InvalidDataException();
 
-        Restaurant newRestaurant = restaurantService.addRestaurant(restaurant);
+        Restaurant newRestaurant = restaurantService.addRestaurant(restaurantDTO);
         return ResponseEntity.created(new URI("/" + newRestaurant.getId()))
                 .headers(HeaderUtil.createEntityCreationAlert(
                         "Restaurant", newRestaurant.getId().toString()))
@@ -54,16 +57,15 @@ class RestaurantResource {
     }
 
     @PutMapping
-    public ResponseEntity<Object> updateRestaurant(
-            @RequestBody @Valid Restaurant restaurant) {
+    public ResponseEntity<Restaurant> updateRestaurant(@RequestBody @Valid RestaurantDTO restaurantDTO) {
 
-        if (restaurant.getId() == null)
+        if (restaurantDTO.getId() == null)
             return ResponseEntity.notFound()
                     .headers(HeaderUtil.createAlert(
                             "Restaurant not found", null))
                     .build();
 
-        Restaurant result = restaurantService.updateRestaurant(restaurant);
+        Restaurant result = restaurantService.updateRestaurant(restaurantDTO);
         return ResponseEntity.ok()
                 .headers(HeaderUtil.createEntityUpdateAlert(
                         "Restaurant", result.getId().toString()))
@@ -71,7 +73,7 @@ class RestaurantResource {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Object> deleteRestaurant(@RequestBody @Valid Long id) throws RestaurantNotFoundException {
+    public ResponseEntity<Void> deleteRestaurant(@PathVariable @Valid Long id) throws RestaurantNotFoundException {
         restaurantService.deleteRestaurant(id);
         return ResponseEntity
                 .ok()
