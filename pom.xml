@@ -9,9 +9,9 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>hu.student.projlab</groupId>
-    <artifactId>mealride_api</artifactId>
+    <artifactId>mealride-api</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>mealride_api</name>
+    <name>mealride-api</name>
     <description>REST API for MealRide Project</description>
 
     <properties>

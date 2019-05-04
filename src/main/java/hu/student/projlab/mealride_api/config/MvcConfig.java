@@ -13,7 +13,7 @@ public class MvcConfig implements WebMvcConfigurer {
     public DriverManagerDataSource dataSource() {
         DriverManagerDataSource driverManagerDataSource = new DriverManagerDataSource();
         driverManagerDataSource.setDriverClassName("com.mysql.cj.jdbc.Driver");
-        driverManagerDataSource.setUrl("jdbc:mysql://localhost:3306/db_mealride");
+        driverManagerDataSource.setUrl("jdbc:mysql://localhost:3306/db_mealride_api");
         driverManagerDataSource.setUsername("root");
         driverManagerDataSource.setPassword("");
         return driverManagerDataSource;

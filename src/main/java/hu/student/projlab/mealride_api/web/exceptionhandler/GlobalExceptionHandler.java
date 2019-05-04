@@ -1,7 +1,6 @@
 package hu.student.projlab.mealride_api.web.exceptionhandler;
 
 import com.google.gson.Gson;
-import hu.student.projlab.mealride_api.domain.Order;
 import hu.student.projlab.mealride_api.exception.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

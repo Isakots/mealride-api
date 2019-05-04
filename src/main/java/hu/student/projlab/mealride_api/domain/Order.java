@@ -11,7 +11,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "ORDERS")
-public class Order extends AbstractEntity {
+public class Order {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
