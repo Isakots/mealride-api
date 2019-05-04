@@ -65,7 +65,7 @@ public class DeliveryAddressService {
      * @param id ID of the address
      */
     public void deleteAddress(Long id) {
-        DeliveryAddress address = deliveryAddressRepository.findById(id).get();
+        DeliveryAddress address = deliveryAddressRepository.findById(id).orElseThrow(NoSuchFieldError::new);
         checkIfUserHasSpecifiedAddress(address);
         address.setCustomer(null);
         address.setDeletionDate(LocalDateTime.now());

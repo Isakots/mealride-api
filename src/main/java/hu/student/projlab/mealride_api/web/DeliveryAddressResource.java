@@ -2,6 +2,7 @@ package hu.student.projlab.mealride_api.web;
 
 
 import hu.student.projlab.mealride_api.domain.DeliveryAddress;
+import hu.student.projlab.mealride_api.exception.InvalidDataException;
 import hu.student.projlab.mealride_api.exception.UserIsNotAuthenticatedException;
 import hu.student.projlab.mealride_api.service.DeliveryAddressService;
 import hu.student.projlab.mealride_api.util.EndpointConstants;
@@ -15,7 +16,6 @@ import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
-import java.util.NoSuchElementException;
 
 @RestController
 @RequestMapping(value = EndpointConstants.USER_ENDPOINT + EndpointConstants.ADDRESS_RESOURCE)
@@ -38,10 +38,10 @@ class DeliveryAddressResource {
 
     @PostMapping
     public ResponseEntity<DeliveryAddress> addAddress
-            (@RequestBody @Valid DeliveryAddress address) throws URISyntaxException {
+            (@RequestBody @Valid DeliveryAddress address) throws URISyntaxException, InvalidDataException {
 
         if (address.getId() != null)
-            throw new NoSuchElementException();
+            throw new InvalidDataException();
         // TODO: Create an exceptionhandler class and an Exception type for this.
 
         DeliveryAddress newAddress = deliveryAddressService.addAddress(address);

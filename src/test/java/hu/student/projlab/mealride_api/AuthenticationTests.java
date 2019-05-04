@@ -16,6 +16,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.notNullValue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -50,6 +51,7 @@ public class AuthenticationTests {
                 .content(new Gson().toJson(this.userWithAllCredentials)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("tokenType", equalTo("Bearer")))
+                .andExpect(jsonPath("accessToken", notNullValue()))
                 .andExpect(jsonPath(("username"), equalTo("example@mealride.com")));
     }
 
