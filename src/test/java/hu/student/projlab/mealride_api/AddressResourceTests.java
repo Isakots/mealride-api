@@ -1,34 +1,37 @@
 package hu.student.projlab.mealride_api;
 
-import com.google.gson.Gson;
-import com.jayway.jsonpath.JsonPath;
 import hu.student.projlab.mealride_api.domain.DeliveryAddress;
+import hu.student.projlab.mealride_api.service.dto.RestaurantDTO;
+import hu.student.projlab.mealride_api.service.dto.UserDTO;
+import hu.student.projlab.mealride_api.util.TestUtils;
+import hu.student.projlab.mealride_api.web.JwtResponse;
+import hu.student.projlab.mealride_api.web.exceptionhandler.Message;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.MediaType;
-import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.boot.web.server.LocalServerPort;
+import org.springframework.http.*;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.web.context.WebApplicationContext;
 
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.notNullValue;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
 @RunWith(SpringRunner.class)
-@SpringBootTest
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class AddressResourceTests {
 
-    private final String urlTemplate = "/user/addresses";
+    @LocalServerPort
+    private int port;
 
-    private final String username = "example@mealride.com";
+    @Autowired
+    private TestRestTemplate restTemplate;
+
+    private final String endpoint = "/user/addresses";
 
     private DeliveryAddress mockAddress =
             new DeliveryAddress("9999", "MockCity", "MockStreet", "MockState", (short) 9, null, null);
@@ -36,124 +39,167 @@ public class AddressResourceTests {
     private DeliveryAddress mockAddressUpdated =
             new DeliveryAddress("1111", "MockCityUpdated", "MockStreetUpdated", "MockStateUpdated", (short) 1, null, null);
 
-    private Long storedID;
-
-
-    private MockMvc mockMvc;
-
-    @Autowired
-    private WebApplicationContext webContext;
+    private String sigInURL;
 
     @Before
-    public void setupMockMvc() {
-        mockMvc = MockMvcBuilders.webAppContextSetup(webContext)
-                //.apply(springSecurity())
-                .build();
+    public void init() {
+        this.sigInURL = "http://localhost:" + port + TestUtils.contextpath + "/signin";
+    }
+
+    @Before
+    public void signInUser() {
+        HttpHeaders requestHeaders = new HttpHeaders();
+        requestHeaders.setContentType(MediaType.APPLICATION_JSON);
+
+        HttpEntity<UserDTO> requestEntity = new HttpEntity<>(new UserDTO(TestUtils.username, TestUtils.password), requestHeaders);
+
+        ResponseEntity<JwtResponse> jwtResponse = restTemplate.exchange(
+                sigInURL,
+                HttpMethod.POST,
+                requestEntity,
+                JwtResponse.class
+        );
+
+        TestUtils.token = jwtResponse.getBody().getAccessToken();
     }
 
     @Test
-    @WithMockUser(username = username)
-    public void postUserAddressWithoutIdShouldBeCreated() throws Exception {
+    public void postAddressWithoutIdShouldBeCreated() {
 
-        postData();
+        HttpHeaders requestHeaders = TestUtils.setHeaders();
+        HttpEntity<DeliveryAddress> requestEntity = new HttpEntity<>(mockAddress, requestHeaders);
+        mockAddress.setId(null);
 
-        mockMvc.perform(get(urlTemplate)
-                .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$[2].id", notNullValue()))
-                .andExpect(jsonPath("$[2].zipcode", equalTo("9999")))
-                .andExpect(jsonPath("$[2].city", equalTo("MockCity")))
-                .andExpect(jsonPath("$[2].street", equalTo("MockStreet")))
-                .andExpect(jsonPath("$[2].state", equalTo("MockState")))
-                .andExpect(jsonPath("$[2].housenumber", equalTo(9)));
+        ResponseEntity<DeliveryAddress> response = restTemplate.exchange(
+                "http://localhost:" + port + TestUtils.contextpath + endpoint,
+                HttpMethod.POST,
+                requestEntity,
+                DeliveryAddress.class
+        );
 
+        assertThat(response.getStatusCode(), equalTo(HttpStatus.CREATED));
+        assertThat(response.getBody().getZipcode(), equalTo("9999"));
+        assertThat(response.getBody().getCity(), equalTo("MockCity"));
+        assertThat(response.getBody().getStreet(), equalTo("MockStreet"));
+        assertThat(response.getBody().getState(), equalTo("MockState"));
+        assertThat(response.getBody().getHousenumber(), equalTo((short) 9));
     }
 
     @Test
-    @WithMockUser(username = username)
-    public void postUserAddressWithIdShouldThrowException() throws Exception {
+    public void postAddressWithIdShouldReturnBadRequest() {
 
+        HttpHeaders requestHeaders = TestUtils.setHeaders();
         mockAddress.setId((long) 9999);
 
-        mockMvc.perform(post(urlTemplate)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(new Gson().toJson(mockAddress)))
-                .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("message", equalTo("DTO must not contain ID.")));
+        HttpEntity<DeliveryAddress> requestEntity = new HttpEntity<>(mockAddress, requestHeaders);
 
+        ResponseEntity<Message> response = restTemplate.exchange(
+                "http://localhost:" + port + TestUtils.contextpath + endpoint,
+                HttpMethod.POST,
+                requestEntity,
+                Message.class
+        );
+
+        assertThat(response.getStatusCode(), equalTo(HttpStatus.BAD_REQUEST));
+        assertThat(response.getBody().getMessage(), equalTo("DTO must not contain ID."));
     }
-
-    /*
-        @Test
-        @WithMockUser(username = username)
-        public void putUserAddressWithoutIdShouldReturnNotFound() throws Exception {
-
-            mockMvc.perform(put(urlTemplate)
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content(new Gson().toJson(mockAddressUpdated)))
-                    .andExpect(status().isNotFound());
-        }
-    */
-    @Test
-    @WithMockUser(username = username)
-    public void putUserAddressWithIdShouldBeUpdated() throws Exception {
-
-        postData();
-
-        mockMvc.perform(put(urlTemplate)
-                .contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON)
-                .content(new Gson().toJson(mockAddressUpdated)))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("id", equalTo(storedID)))
-                .andExpect(jsonPath("zipcode", equalTo("1111")))
-                .andExpect(jsonPath("city", equalTo("MockCityUpdated")))
-                .andExpect(jsonPath("street", equalTo("MockStreetUpdated")))
-                .andExpect(jsonPath("state", equalTo("MockStateUpdated")))
-                .andExpect(jsonPath("housenumber", equalTo((short) 1)));
-    }
-
 
     @Test
-    @WithMockUser(username = username)
-    public void deleteUserAddressWithValidIdShouldBeDeleted() throws Exception {
+    public void putAddressWithoutIdShouldReturnNotFound() {
 
-        postData();
+        HttpHeaders requestHeaders = TestUtils.setHeaders();
+        HttpEntity<DeliveryAddress> requestEntity = new HttpEntity<>(mockAddress, requestHeaders);
+        mockAddress.setId(null);
 
-        mockMvc.perform(delete(urlTemplate + "/" + storedID)
-                .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk());
+        ResponseEntity<Message> response = restTemplate.exchange(
+                "http://localhost:" + port + TestUtils.contextpath + endpoint,
+                HttpMethod.PUT,
+                requestEntity,
+                Message.class
+        );
+
+        assertThat(response.getStatusCode(), equalTo(HttpStatus.NOT_FOUND));
+    }
+
+    @Test
+    public void putAddressWithIdShouldBeUpdated() {
+
+        HttpHeaders requestHeaders = TestUtils.setHeaders();
+        HttpEntity<DeliveryAddress> requestEntity = new HttpEntity<>(mockAddress, requestHeaders);
+        mockAddress.setId(null);
+
+        ResponseEntity<DeliveryAddress> POSTresponse = restTemplate.exchange(
+                "http://localhost:" + port + TestUtils.contextpath + endpoint,
+                HttpMethod.POST,
+                requestEntity,
+                DeliveryAddress.class
+        );
+
+        mockAddressUpdated.setId(POSTresponse.getBody().getId());
+
+        assertThat(POSTresponse.getBody().getId(), notNullValue());
+
+        HttpEntity<DeliveryAddress> PUTrequestEntity = new HttpEntity<>(mockAddressUpdated, requestHeaders);
+
+        ResponseEntity<DeliveryAddress> PUTresponse = restTemplate.exchange(
+                "http://localhost:" + port + TestUtils.contextpath + endpoint,
+                HttpMethod.PUT,
+                PUTrequestEntity,
+                DeliveryAddress.class
+        );
+
+        assertThat(PUTresponse.getStatusCode(), equalTo(HttpStatus.OK));
+        assertThat(PUTresponse.getBody().getZipcode(), equalTo("1111"));
+        assertThat(PUTresponse.getBody().getCity(), equalTo("MockCityUpdated"));
+        assertThat(PUTresponse.getBody().getStreet(), equalTo("MockStreetUpdated"));
+        assertThat(PUTresponse.getBody().getState(), equalTo("MockStateUpdated"));
+        assertThat(PUTresponse.getBody().getHousenumber(), equalTo((short) 1));
+    }
+
+    @Test
+    public void deleteAddressWithValidIdShouldBeDeleted() {
+
+        // Creating Restaurant
+        HttpHeaders requestHeaders = TestUtils.setHeaders();
+        HttpEntity<DeliveryAddress> requestEntity = new HttpEntity<>(mockAddress, requestHeaders);
+        mockAddress.setId(null);
+
+        ResponseEntity<DeliveryAddress> POSTresponse = restTemplate.exchange(
+                "http://localhost:" + port + TestUtils.contextpath + endpoint,
+                HttpMethod.POST,
+                requestEntity,
+                DeliveryAddress.class
+        );
+
+        // Deleting Restaurant
+        HttpEntity<RestaurantDTO> DELETERequestEntity = new HttpEntity<>(requestHeaders);
+
+        ResponseEntity<Void> DELETEresponse = restTemplate.exchange(
+                "http://localhost:" + port + TestUtils.contextpath + endpoint + "/" + POSTresponse.getBody().getId(),
+                HttpMethod.DELETE,
+                DELETERequestEntity,
+                Void.class
+        );
+
+        assertThat(DELETEresponse.getStatusCode(), equalTo(HttpStatus.OK));
     }
 
 
     @Test
-    @WithMockUser(username = username)
-    public void deleteUserAddressWithInvalidIdShouldThrowException() throws Exception {
+    public void deleteAddressWithInValidIdShouldReturnNotFound() {
 
-        storedID = (long) 9999;
+        HttpHeaders requestHeaders = TestUtils.setHeaders();
+        HttpEntity<DeliveryAddress> DELETERequestEntity = new HttpEntity<>(requestHeaders);
 
-        mockMvc.perform(delete(urlTemplate + "/" + storedID)
-                .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isNotFound());
-        //.andExpect(jsonPath("message", equalTo("Elements not found.")));
+        ResponseEntity<Void> DELETEresponse = restTemplate.exchange(
+                "http://localhost:" + port + TestUtils.contextpath + endpoint + "/" + "9999",
+                HttpMethod.DELETE,
+                DELETERequestEntity,
+                Void.class
+        );
+        assertThat(DELETEresponse.getStatusCode(), equalTo(HttpStatus.NOT_FOUND));
     }
 
 
-    private void postData() throws Exception {
-        mockMvc.perform(post(urlTemplate)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(new Gson().toJson(mockAddress)))
-                .andExpect(status().isCreated())
-                .andExpect(jsonPath("id", notNullValue()))
-                .andExpect(jsonPath("zipcode", equalTo("9999")))
-                .andExpect(jsonPath("city", equalTo("MockCity")))
-                .andExpect(jsonPath("street", equalTo("MockStreet")))
-                .andExpect(jsonPath("state", equalTo("MockState")))
-                .andExpect(jsonPath("housenumber", equalTo(9)))
-                .andDo(mvcResult -> {
-                    String jsondata = mvcResult.getResponse().getContentAsString();
-                    storedID = Long.parseLong(JsonPath.parse(jsondata).read("id").toString());
-                });
-    }
 
 }

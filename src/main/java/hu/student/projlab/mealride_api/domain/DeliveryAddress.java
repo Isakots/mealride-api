@@ -7,6 +7,9 @@ import javax.persistence.*;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
+import java.util.Objects;
+
+import static java.util.Objects.hash;
 
 @Entity
 @Table(name="ADDRESS")
@@ -133,6 +136,19 @@ public class DeliveryAddress extends AbstractEntity{
 
     public void setCustomer(CustomerUser customer) {
         this.customer = customer;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof DeliveryAddress)) return false;
+        DeliveryAddress that = (DeliveryAddress) o;
+        return Objects.equals(id, that.getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return hash(id);
     }
 
     @Override

@@ -11,6 +11,7 @@ import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Service
 @Transactional
@@ -65,7 +66,7 @@ public class DeliveryAddressService {
      * @param id ID of the address
      */
     public void deleteAddress(Long id) {
-        DeliveryAddress address = deliveryAddressRepository.findById(id).orElseThrow(NoSuchFieldError::new);
+        DeliveryAddress address = deliveryAddressRepository.findById(id).orElseThrow(NoSuchElementException::new);
         checkIfUserHasSpecifiedAddress(address);
         address.setCustomer(null);
         address.setDeletionDate(LocalDateTime.now());
