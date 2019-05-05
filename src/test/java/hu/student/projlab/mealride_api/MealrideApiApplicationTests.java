@@ -19,6 +19,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 public class MealrideApiApplicationTests {
 
+    // TODO Create TEST and DEV profiles in order to not put garbage test records into the database
+
     // TODO Creating separated test classes for all endpoints and test all HTTP method
     // What tests should cover:
     // 1. Normal scenario -> expected valid data
@@ -26,7 +28,7 @@ public class MealrideApiApplicationTests {
     // 3. User with no permission -> expected resource is denied
     // 4. Adding first resource to database ( for example first meal to restaurant)
     // -> exception must not be occured
-    // 5.
+
 
     private UserDTO userWithAllCredentials = new UserDTO("example@mealride.com", "12345");
 

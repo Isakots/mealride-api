@@ -3,6 +3,7 @@ package hu.student.projlab.mealride_api;
 import hu.student.projlab.mealride_api.service.dto.RestaurantDTO;
 import hu.student.projlab.mealride_api.service.dto.UserDTO;
 import hu.student.projlab.mealride_api.web.JwtResponse;
+import hu.student.projlab.mealride_api.web.exceptionhandler.Message;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -21,6 +22,8 @@ import static org.junit.Assert.assertNotNull;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class RestaurantResourceTests {
 
+    // TODO Refactor code duplications. --> Create a Generic method for performing POST method.
+
     @LocalServerPort
     private int port;
 
@@ -30,6 +33,10 @@ public class RestaurantResourceTests {
     private final String contextpath = "/mealride/api";
 
     private final String endpoint = "/admin/restaurants";
+
+    private final String username = "example@mealride.com";
+
+    private final String password = "123456";
 
     private String sigInURL;
 
@@ -65,7 +72,7 @@ public class RestaurantResourceTests {
         HttpHeaders requestHeaders = new HttpHeaders();
         requestHeaders.setContentType(MediaType.APPLICATION_JSON);
 
-        HttpEntity<UserDTO> requestEntity = new HttpEntity<>(new UserDTO("example@mealride.com", "123456"), requestHeaders);
+        HttpEntity<UserDTO> requestEntity = new HttpEntity<>(new UserDTO(username, password), requestHeaders);
 
         ResponseEntity<JwtResponse> jwtResponse = restTemplate.exchange(
                 sigInURL,
@@ -86,8 +93,8 @@ public class RestaurantResourceTests {
     public void postRestaurantWithoutIdShouldBeCreated() {
 
         HttpHeaders requestHeaders = setHeaders();
-
         HttpEntity<RestaurantDTO> requestEntity = new HttpEntity<>(restaurantDTO, requestHeaders);
+        restaurantDTO.setId(null);
 
         ResponseEntity<RestaurantDTO> response = restTemplate.exchange(
                 "http://localhost:" + port + contextpath + endpoint,
@@ -97,8 +104,128 @@ public class RestaurantResourceTests {
         );
 
         assertThat(response.getStatusCode(), equalTo(HttpStatus.CREATED));
-
+        assertThat(response.getBody().getName(), equalTo("TestName"));
+        assertThat(response.getBody().getAvgdeliverytime(), equalTo("TestDeliveryTime"));
+        assertThat(response.getBody().getMinorderprice(), equalTo((short) 9999));
+        assertThat(response.getBody().getDeliveryprice(), equalTo((short) 9999));
+        //assertThat(response.getBody().getOpeningtime(), equalTo("2:22"));
+        // assertThat(response.getBody().getClosingtime(), equalTo("22:22"));
     }
+
+    @Test
+    public void postRestaurantWithIdShouldReturnBadRequest() {
+
+        HttpHeaders requestHeaders = setHeaders();
+        restaurantDTO.setId((long) 9999);
+
+        HttpEntity<RestaurantDTO> requestEntity = new HttpEntity<>(restaurantDTO, requestHeaders);
+
+        ResponseEntity<Message> response = restTemplate.exchange(
+                "http://localhost:" + port + contextpath + endpoint,
+                HttpMethod.POST,
+                requestEntity,
+                Message.class
+        );
+
+        assertThat(response.getStatusCode(), equalTo(HttpStatus.BAD_REQUEST));
+        assertThat(response.getBody().getMessage(), equalTo("DTO must not contain ID."));
+    }
+
+    @Test
+    public void putRestaurantWithoutIdShouldReturnNotFound() {
+
+        HttpHeaders requestHeaders = setHeaders();
+        HttpEntity<RestaurantDTO> requestEntity = new HttpEntity<>(restaurantDTO, requestHeaders);
+        restaurantDTO.setId(null);
+
+        ResponseEntity<Message> response = restTemplate.exchange(
+                "http://localhost:" + port + contextpath + endpoint,
+                HttpMethod.PUT,
+                requestEntity,
+                Message.class
+        );
+
+        assertThat(response.getStatusCode(), equalTo(HttpStatus.NOT_FOUND));
+    }
+
+    @Test
+    public void putRestaurantWithIdShouldBeUpdated() {
+
+        HttpHeaders requestHeaders = setHeaders();
+        HttpEntity<RestaurantDTO> requestEntity = new HttpEntity<>(restaurantDTO, requestHeaders);
+        restaurantDTO.setId(null);
+
+        ResponseEntity<RestaurantDTO> POSTresponse = restTemplate.exchange(
+                "http://localhost:" + port + contextpath + endpoint,
+                HttpMethod.POST,
+                requestEntity,
+                RestaurantDTO.class
+        );
+
+        restaurantDTOUpdated.setId(POSTresponse.getBody().getId());
+        HttpEntity<RestaurantDTO> PUTrequestEntity = new HttpEntity<>(restaurantDTOUpdated, requestHeaders);
+
+        ResponseEntity<RestaurantDTO> PUTresponse = restTemplate.exchange(
+                "http://localhost:" + port + contextpath + endpoint,
+                HttpMethod.PUT,
+                PUTrequestEntity,
+                RestaurantDTO.class
+        );
+
+        assertThat(PUTresponse.getStatusCode(), equalTo(HttpStatus.OK));
+        assertThat(PUTresponse.getBody().getName(), equalTo("TestNameUpdated"));
+        assertThat(PUTresponse.getBody().getAvgdeliverytime(), equalTo("TestDeliveryTimeUpdated"));
+        assertThat(PUTresponse.getBody().getMinorderprice(), equalTo((short) 8888));
+        assertThat(PUTresponse.getBody().getDeliveryprice(), equalTo((short) 8888));
+        //assertThat(PUTresponse.getBody().getOpeningtime(), equalTo("3:33"));
+        //assertThat(PUTresponse.getBody().getClosingtime(), equalTo("21:21"));
+    }
+
+    @Test
+    public void deleteRestaurantWithValidIdShouldBeDeleted() {
+
+        // Creating Restaurant
+        HttpHeaders requestHeaders = setHeaders();
+        HttpEntity<RestaurantDTO> requestEntity = new HttpEntity<>(restaurantDTO, requestHeaders);
+        restaurantDTO.setId(null);
+
+        ResponseEntity<RestaurantDTO> POSTresponse = restTemplate.exchange(
+                "http://localhost:" + port + contextpath + endpoint,
+                HttpMethod.POST,
+                requestEntity,
+                RestaurantDTO.class
+        );
+
+
+        // Deleting Restaurant
+        HttpEntity<RestaurantDTO> DELETERequestEntity = new HttpEntity<>(requestHeaders);
+
+        ResponseEntity<Void> DELETEresponse = restTemplate.exchange(
+                "http://localhost:" + port + contextpath + endpoint + "/" + POSTresponse.getBody().getId(),
+                HttpMethod.DELETE,
+                DELETERequestEntity,
+                Void.class
+        );
+
+        assertThat(DELETEresponse.getStatusCode(), equalTo(HttpStatus.OK));
+    }
+
+
+    @Test
+    public void deleteRestaurantWithInValidIdShouldReturnNotFound() {
+
+        HttpHeaders requestHeaders = setHeaders();
+        HttpEntity<RestaurantDTO> DELETERequestEntity = new HttpEntity<>(requestHeaders);
+
+        ResponseEntity<Void> DELETEresponse = restTemplate.exchange(
+                "http://localhost:" + port + contextpath + endpoint + "/" + "9999",
+                HttpMethod.DELETE,
+                DELETERequestEntity,
+                Void.class
+        );
+        assertThat(DELETEresponse.getStatusCode(), equalTo(HttpStatus.NOT_FOUND));
+    }
+
 
     private HttpHeaders setHeaders() {
         HttpHeaders requestHeaders = new HttpHeaders();
@@ -106,6 +233,5 @@ public class RestaurantResourceTests {
         requestHeaders.setBearerAuth(token);
         return requestHeaders;
     }
-
 
 }
