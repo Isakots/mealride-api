@@ -29,7 +29,7 @@ public class CreditCardMapper {
             creditCard.setId(cardDTO.getId());
             creditCard.setNumber(cardDTO.getNumber());
             creditCard.setOwnername(cardDTO.getOwnername());
-            creditCard.setExpriationdate(LocalDate.of(cardDTO.getExpriationyear(), cardDTO.getExpriationmonth(), 0));
+            creditCard.setExpriationdate(LocalDate.of(cardDTO.getExpriationyear(), cardDTO.getExpriationmonth(), 15));
             creditCard.setCvc(bCryptPasswordEncoder.encode(cardDTO.getCvc()));
             return creditCard;
         }

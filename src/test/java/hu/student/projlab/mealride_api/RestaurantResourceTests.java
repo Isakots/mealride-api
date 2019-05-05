@@ -191,7 +191,7 @@ public class RestaurantResourceTests {
 
 
         // Deleting Restaurant
-        HttpEntity<RestaurantDTO> DELETERequestEntity = new HttpEntity<>(requestHeaders);
+        HttpEntity<Void> DELETERequestEntity = new HttpEntity<>(requestHeaders);
 
         ResponseEntity<Void> DELETEresponse = restTemplate.exchange(
                 "http://localhost:" + port + TestUtils.contextpath + endpoint + "/" + POSTresponse.getBody().getId(),
@@ -208,7 +208,7 @@ public class RestaurantResourceTests {
     public void deleteRestaurantWithInValidIdShouldReturnNotFound() {
 
         HttpHeaders requestHeaders = TestUtils.setHeaders();
-        HttpEntity<RestaurantDTO> DELETERequestEntity = new HttpEntity<>(requestHeaders);
+        HttpEntity<Void> DELETERequestEntity = new HttpEntity<>(requestHeaders);
 
         ResponseEntity<Void> DELETEresponse = restTemplate.exchange(
                 "http://localhost:" + port + TestUtils.contextpath + endpoint + "/" + "9999",

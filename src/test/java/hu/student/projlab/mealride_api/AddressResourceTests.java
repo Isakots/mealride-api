@@ -1,7 +1,6 @@
 package hu.student.projlab.mealride_api;
 
 import hu.student.projlab.mealride_api.domain.DeliveryAddress;
-import hu.student.projlab.mealride_api.service.dto.RestaurantDTO;
 import hu.student.projlab.mealride_api.service.dto.UserDTO;
 import hu.student.projlab.mealride_api.util.TestUtils;
 import hu.student.projlab.mealride_api.web.JwtResponse;
@@ -172,7 +171,7 @@ public class AddressResourceTests {
         );
 
         // Deleting Restaurant
-        HttpEntity<RestaurantDTO> DELETERequestEntity = new HttpEntity<>(requestHeaders);
+        HttpEntity<Void> DELETERequestEntity = new HttpEntity<>(requestHeaders);
 
         ResponseEntity<Void> DELETEresponse = restTemplate.exchange(
                 "http://localhost:" + port + TestUtils.contextpath + endpoint + "/" + POSTresponse.getBody().getId(),

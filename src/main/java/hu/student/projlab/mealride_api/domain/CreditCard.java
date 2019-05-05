@@ -11,32 +11,32 @@ import java.time.LocalDate;
 import java.util.Objects;
 
 @Entity
-@Table(name="CARD")
-public class CreditCard extends AbstractEntity{
+@Table(name = "CARD")
+public class CreditCard extends AbstractEntity {
 
     @Id
     @GeneratedValue
     private Long id;
 
     @JsonIgnore
-    @Pattern(regexp="[0-9]{16}", message="Car number format is not correct!")
-    @Column(name="CARD_NUMBER")
+    @Pattern(regexp = "[0-9]{16}", message = "Car number format is not correct!")
+    @Column(name = "CARD_NUMBER")
     private String number;
 
-    @Column(name="OWNER_NAME")
+    @Column(name = "OWNER_NAME")
     private String ownername;
 
     @Convert(converter = LocalDateAttributeConverter.class)
-    @Column(name="EXPIRATION_DATE")
+    @Column(name = "EXPIRATION_DATE")
     private LocalDate expriationdate;
 
     @JsonIgnore
-    @Column(name="CVC")
+    @Column(name = "CVC")
     private String cvc; // hashed
 
     @JsonIgnore
     @ManyToOne
-    @JoinColumn(name="CUSTOMERUSER_ID")
+    @JoinColumn(name = "CUSTOMERUSER_ID")
     private CustomerUser customer;
 
     public CreditCard() {
@@ -50,14 +50,12 @@ public class CreditCard extends AbstractEntity{
         return id.equals(that.id) &&
                 number.equals(that.number) &&
                 ownername.equals(that.ownername) &&
-                expriationdate.equals(that.expriationdate) &&
-                cvc.equals(that.cvc) &&
-                customer.equals(that.customer);
+                expriationdate.equals(that.expriationdate);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, number, ownername, expriationdate, cvc, customer);
+        return Objects.hash(id, number, ownername, expriationdate);
     }
 
     public Long getId() {

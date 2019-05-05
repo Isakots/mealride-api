@@ -8,7 +8,7 @@ import java.io.Serializable;
 public class CreditCardDTO implements Serializable {
 
     private Long id;
-    @Pattern(regexp="[0-9]{16}", message="Car number format is not correct!")
+    @Pattern(regexp = "[0-9]{16}", message = "Card number format is not correct!")
     private String number;
     private String ownername;
     private int expriationmonth;
@@ -19,9 +19,8 @@ public class CreditCardDTO implements Serializable {
 
     }
 
-    public CreditCardDTO(Long id, @Pattern(regexp = "[0-9]{16}", message = "Car number format is not correct!") String number,
+    public CreditCardDTO(@Pattern(regexp = "[0-9]{16}", message = "Card number format is not correct!") String number,
                          String ownername, int expriationmonth, int expriationyear, String cvc) {
-        this.id = id;
         this.number = number;
         this.ownername = ownername;
         this.expriationmonth = expriationmonth;
