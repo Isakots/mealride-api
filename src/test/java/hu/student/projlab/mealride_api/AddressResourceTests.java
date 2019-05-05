@@ -188,7 +188,7 @@ public class AddressResourceTests {
     public void deleteAddressWithInValidIdShouldReturnNotFound() {
 
         HttpHeaders requestHeaders = TestUtils.setHeaders();
-        HttpEntity<DeliveryAddress> DELETERequestEntity = new HttpEntity<>(requestHeaders);
+        HttpEntity<Void> DELETERequestEntity = new HttpEntity<>(requestHeaders);
 
         ResponseEntity<Void> DELETEresponse = restTemplate.exchange(
                 "http://localhost:" + port + TestUtils.contextpath + endpoint + "/" + "9999",
