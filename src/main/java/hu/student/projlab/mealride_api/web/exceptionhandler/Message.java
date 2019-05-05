@@ -1,5 +1,10 @@
 package hu.student.projlab.mealride_api.web.exceptionhandler;
 
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
 public class Message {
     private String message;
 
@@ -10,11 +15,4 @@ public class Message {
         this.message = message;
     }
 
-    public String getMessage() {
-        return message;
-    }
-
-    public void setMessage(String message) {
-        this.message = message;
-    }
 }

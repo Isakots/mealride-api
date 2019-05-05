@@ -1,12 +1,14 @@
 package hu.student.projlab.mealride_api.service;
 
 
+import hu.student.projlab.mealride_api.config.security.SecurityUtils;
+import hu.student.projlab.mealride_api.domain.user.CustomerUser;
 import hu.student.projlab.mealride_api.domain.user.SpringUser;
 import hu.student.projlab.mealride_api.exception.UserIsNotAuthenticatedException;
-import hu.student.projlab.mealride_api.repository.RoleRepository;
+import hu.student.projlab.mealride_api.repository.CustomerUserRepository;
 import hu.student.projlab.mealride_api.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
@@ -19,15 +21,12 @@ public class UserService {
 
     private UserRepository userRepository;
 
-    private PasswordEncoder PasswordEncoder;
-
-    private RoleRepository roleRepository;
+    private CustomerUserRepository customerUserRepository;
 
     @Autowired
-    public UserService(UserRepository userRepository, PasswordEncoder PasswordEncoder, RoleRepository roleRepository) {
+    public UserService(UserRepository userRepository, CustomerUserRepository customerUserRepository) {
         this.userRepository = userRepository;
-        this.PasswordEncoder = PasswordEncoder;
-        this.roleRepository = roleRepository;
+        this.customerUserRepository = customerUserRepository;
     }
 
     public List<SpringUser> findAllWorkers(Long restaurantId) {
@@ -52,4 +51,20 @@ public class UserService {
     public void save(SpringUser springUser) {
         userRepository.save(springUser);
     }
+
+    public CustomerUser getUserData() {
+        return this.getCurrentUser(SecurityUtils.getCurrentUserLogin()).getCustomerUser();
+    }
+
+    public CustomerUser modifyUserData(CustomerUser customerUser) {
+        validateID(customerUser);
+        return customerUserRepository.save(customerUser);
+    }
+
+    private void validateID(CustomerUser customerUser) {
+        if (this.getCurrentUser(SecurityUtils.getCurrentUserLogin()).getCustomerUser().getId() !=
+                customerUser.getId())
+            throw new AccessDeniedException("Invalid operation");
+    }
+
 }

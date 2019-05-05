@@ -1,17 +1,11 @@
 package hu.student.projlab.mealride_api.web;
 
-import hu.student.projlab.mealride_api.config.security.SecurityConstants;
+import hu.student.projlab.mealride_api.domain.user.CustomerUser;
 import hu.student.projlab.mealride_api.service.UserService;
-import hu.student.projlab.mealride_api.service.dto.UserDTO;
 import hu.student.projlab.mealride_api.util.EndpointConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
-import javax.validation.Valid;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping(value = EndpointConstants.USER_ENDPOINT)
@@ -24,10 +18,15 @@ class UserController {
         this.userService = userService;
     }
 
-    @PostMapping(SecurityConstants.SIGN_UP_URL)
-    public ResponseEntity<Object> signUp(@RequestBody @Valid UserDTO dto) {
+    @GetMapping("/profile")
+    public ResponseEntity<CustomerUser> getPersonalData() {
+        return ResponseEntity.ok(userService.getUserData());
+    }
 
-        return ResponseEntity.ok(dto);
+    @PostMapping("/profile")
+    public ResponseEntity<CustomerUser> modifyPersonalData(@RequestBody CustomerUser customerUser) {
+        CustomerUser modifiedUser = userService.modifyUserData(customerUser);
+        return ResponseEntity.ok(modifiedUser);
     }
 
 
