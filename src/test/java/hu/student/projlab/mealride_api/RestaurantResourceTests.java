@@ -2,6 +2,7 @@ package hu.student.projlab.mealride_api;
 
 import hu.student.projlab.mealride_api.service.dto.RestaurantDTO;
 import hu.student.projlab.mealride_api.service.dto.UserDTO;
+import hu.student.projlab.mealride_api.util.EndpointConstants;
 import hu.student.projlab.mealride_api.util.TestUtils;
 import hu.student.projlab.mealride_api.web.JwtResponse;
 import hu.student.projlab.mealride_api.web.exceptionhandler.Message;
@@ -12,11 +13,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.web.server.LocalServerPort;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.util.List;
+
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.assertNotNull;
 
 @RunWith(SpringRunner.class)
@@ -31,7 +36,7 @@ public class RestaurantResourceTests {
     @Autowired
     private TestRestTemplate restTemplate;
 
-    private final String endpoint = "/admin/restaurants";
+    private final String endpoint = EndpointConstants.ADMIN_ENDPOINT + EndpointConstants.RESTAURANT_RESOURCE;
 
     private String sigInURL;
 
@@ -80,6 +85,23 @@ public class RestaurantResourceTests {
     @Test
     public void assertTokenIsSet() {
         assertNotNull(TestUtils.token);
+    }
+
+    @Test
+    public void getRestaurantsShouldReturnWithRestaurants() {
+        HttpHeaders requestHeaders = TestUtils.setHeaders();
+        HttpEntity<Void> requestEntity = new HttpEntity<>(requestHeaders);
+
+        ResponseEntity<List<RestaurantDTO>> response = restTemplate.exchange(
+                "http://localhost:" + port + TestUtils.contextpath + endpoint,
+                HttpMethod.GET,
+                requestEntity,
+                new ParameterizedTypeReference<List<RestaurantDTO>>() {
+                }
+        );
+
+        assertThat(response.getStatusCode(), equalTo(HttpStatus.OK));
+        assertThat(response.getBody(), notNullValue());
     }
 
     @Test

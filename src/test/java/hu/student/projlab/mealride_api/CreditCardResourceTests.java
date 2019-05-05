@@ -2,6 +2,7 @@ package hu.student.projlab.mealride_api;
 
 import hu.student.projlab.mealride_api.service.dto.CreditCardDTO;
 import hu.student.projlab.mealride_api.service.dto.UserDTO;
+import hu.student.projlab.mealride_api.util.EndpointConstants;
 import hu.student.projlab.mealride_api.util.TestUtils;
 import hu.student.projlab.mealride_api.web.JwtResponse;
 import hu.student.projlab.mealride_api.web.exceptionhandler.Message;
@@ -12,8 +13,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.web.server.LocalServerPort;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
 import org.springframework.test.context.junit4.SpringRunner;
+
+import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
@@ -28,7 +32,7 @@ public class CreditCardResourceTests {
     @Autowired
     private TestRestTemplate restTemplate;
 
-    private final String endpoint = "/user/cards";
+    private final String endpoint = EndpointConstants.USER_ENDPOINT + EndpointConstants.CREDITCARD_RESOURCE;
 
     private CreditCardDTO mockCard =
             new CreditCardDTO("1234567890123456", "Csokasi Marcel", 6, 21, "897");
@@ -58,6 +62,23 @@ public class CreditCardResourceTests {
         );
 
         TestUtils.token = jwtResponse.getBody().getAccessToken();
+    }
+
+    @Test
+    public void getCardsShouldReturnWithCards() {
+        HttpHeaders requestHeaders = TestUtils.setHeaders();
+        HttpEntity<Void> requestEntity = new HttpEntity<>(requestHeaders);
+
+        ResponseEntity<List<CreditCardDTO>> response = restTemplate.exchange(
+                "http://localhost:" + port + TestUtils.contextpath + endpoint,
+                HttpMethod.GET,
+                requestEntity,
+                new ParameterizedTypeReference<List<CreditCardDTO>>() {
+                }
+        );
+
+        assertThat(response.getStatusCode(), equalTo(HttpStatus.OK));
+        assertThat(response.getBody(), notNullValue());
     }
 
     @Test

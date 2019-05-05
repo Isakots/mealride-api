@@ -15,7 +15,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class WorkerResourceTests {
+public class UserControllerTests {
 
     @LocalServerPort
     private int port;
@@ -23,7 +23,7 @@ public class WorkerResourceTests {
     @Autowired
     private TestRestTemplate restTemplate;
 
-    private final String endpoint = EndpointConstants.RESTAURANT_ENDPOINT + EndpointConstants.WORKER_RESOURCE;
+    private final String endpoint = EndpointConstants.USER_ENDPOINT;
 
     private String sigInURL;
 
