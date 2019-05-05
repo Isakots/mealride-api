@@ -2,6 +2,7 @@ package hu.student.projlab.mealride_api;
 
 import hu.student.projlab.mealride_api.service.dto.RestaurantDTO;
 import hu.student.projlab.mealride_api.service.dto.UserDTO;
+import hu.student.projlab.mealride_api.util.TestUtils;
 import hu.student.projlab.mealride_api.web.JwtResponse;
 import hu.student.projlab.mealride_api.web.exceptionhandler.Message;
 import org.junit.Before;
@@ -30,21 +31,13 @@ public class RestaurantResourceTests {
     @Autowired
     private TestRestTemplate restTemplate;
 
-    private final String contextpath = "/mealride/api";
-
     private final String endpoint = "/admin/restaurants";
-
-    private final String username = "example@mealride.com";
-
-    private final String password = "123456";
 
     private String sigInURL;
 
     private RestaurantDTO restaurantDTO;
 
     private RestaurantDTO restaurantDTOUpdated;
-
-    private String token;
 
     @Before
     public void initObjects() {
@@ -64,7 +57,7 @@ public class RestaurantResourceTests {
         restaurantDTOUpdated.setOpeningtime("3:33");
         restaurantDTOUpdated.setClosingtime("21:21");
 
-        this.sigInURL = "http://localhost:" + port + contextpath + "/signin";
+        this.sigInURL = "http://localhost:" + port + TestUtils.contextpath + "/signin";
     }
 
     @Before
@@ -72,7 +65,7 @@ public class RestaurantResourceTests {
         HttpHeaders requestHeaders = new HttpHeaders();
         requestHeaders.setContentType(MediaType.APPLICATION_JSON);
 
-        HttpEntity<UserDTO> requestEntity = new HttpEntity<>(new UserDTO(username, password), requestHeaders);
+        HttpEntity<UserDTO> requestEntity = new HttpEntity<>(new UserDTO(TestUtils.username, TestUtils.password), requestHeaders);
 
         ResponseEntity<JwtResponse> jwtResponse = restTemplate.exchange(
                 sigInURL,
@@ -81,23 +74,23 @@ public class RestaurantResourceTests {
                 JwtResponse.class
         );
 
-        this.token = jwtResponse.getBody().getAccessToken();
+        TestUtils.token = jwtResponse.getBody().getAccessToken();
     }
 
     @Test
     public void assertTokenIsSet() {
-        assertNotNull(token);
+        assertNotNull(TestUtils.token);
     }
 
     @Test
     public void postRestaurantWithoutIdShouldBeCreated() {
 
-        HttpHeaders requestHeaders = setHeaders();
+        HttpHeaders requestHeaders = TestUtils.setHeaders();
         HttpEntity<RestaurantDTO> requestEntity = new HttpEntity<>(restaurantDTO, requestHeaders);
         restaurantDTO.setId(null);
 
         ResponseEntity<RestaurantDTO> response = restTemplate.exchange(
-                "http://localhost:" + port + contextpath + endpoint,
+                "http://localhost:" + port + TestUtils.contextpath + endpoint,
                 HttpMethod.POST,
                 requestEntity,
                 RestaurantDTO.class
@@ -115,13 +108,13 @@ public class RestaurantResourceTests {
     @Test
     public void postRestaurantWithIdShouldReturnBadRequest() {
 
-        HttpHeaders requestHeaders = setHeaders();
+        HttpHeaders requestHeaders = TestUtils.setHeaders();
         restaurantDTO.setId((long) 9999);
 
         HttpEntity<RestaurantDTO> requestEntity = new HttpEntity<>(restaurantDTO, requestHeaders);
 
         ResponseEntity<Message> response = restTemplate.exchange(
-                "http://localhost:" + port + contextpath + endpoint,
+                "http://localhost:" + port + TestUtils.contextpath + endpoint,
                 HttpMethod.POST,
                 requestEntity,
                 Message.class
@@ -134,12 +127,12 @@ public class RestaurantResourceTests {
     @Test
     public void putRestaurantWithoutIdShouldReturnNotFound() {
 
-        HttpHeaders requestHeaders = setHeaders();
+        HttpHeaders requestHeaders = TestUtils.setHeaders();
         HttpEntity<RestaurantDTO> requestEntity = new HttpEntity<>(restaurantDTO, requestHeaders);
         restaurantDTO.setId(null);
 
         ResponseEntity<Message> response = restTemplate.exchange(
-                "http://localhost:" + port + contextpath + endpoint,
+                "http://localhost:" + port + TestUtils.contextpath + endpoint,
                 HttpMethod.PUT,
                 requestEntity,
                 Message.class
@@ -151,12 +144,12 @@ public class RestaurantResourceTests {
     @Test
     public void putRestaurantWithIdShouldBeUpdated() {
 
-        HttpHeaders requestHeaders = setHeaders();
+        HttpHeaders requestHeaders = TestUtils.setHeaders();
         HttpEntity<RestaurantDTO> requestEntity = new HttpEntity<>(restaurantDTO, requestHeaders);
         restaurantDTO.setId(null);
 
         ResponseEntity<RestaurantDTO> POSTresponse = restTemplate.exchange(
-                "http://localhost:" + port + contextpath + endpoint,
+                "http://localhost:" + port + TestUtils.contextpath + endpoint,
                 HttpMethod.POST,
                 requestEntity,
                 RestaurantDTO.class
@@ -166,7 +159,7 @@ public class RestaurantResourceTests {
         HttpEntity<RestaurantDTO> PUTrequestEntity = new HttpEntity<>(restaurantDTOUpdated, requestHeaders);
 
         ResponseEntity<RestaurantDTO> PUTresponse = restTemplate.exchange(
-                "http://localhost:" + port + contextpath + endpoint,
+                "http://localhost:" + port + TestUtils.contextpath + endpoint,
                 HttpMethod.PUT,
                 PUTrequestEntity,
                 RestaurantDTO.class
@@ -185,12 +178,12 @@ public class RestaurantResourceTests {
     public void deleteRestaurantWithValidIdShouldBeDeleted() {
 
         // Creating Restaurant
-        HttpHeaders requestHeaders = setHeaders();
+        HttpHeaders requestHeaders = TestUtils.setHeaders();
         HttpEntity<RestaurantDTO> requestEntity = new HttpEntity<>(restaurantDTO, requestHeaders);
         restaurantDTO.setId(null);
 
         ResponseEntity<RestaurantDTO> POSTresponse = restTemplate.exchange(
-                "http://localhost:" + port + contextpath + endpoint,
+                "http://localhost:" + port + TestUtils.contextpath + endpoint,
                 HttpMethod.POST,
                 requestEntity,
                 RestaurantDTO.class
@@ -201,7 +194,7 @@ public class RestaurantResourceTests {
         HttpEntity<RestaurantDTO> DELETERequestEntity = new HttpEntity<>(requestHeaders);
 
         ResponseEntity<Void> DELETEresponse = restTemplate.exchange(
-                "http://localhost:" + port + contextpath + endpoint + "/" + POSTresponse.getBody().getId(),
+                "http://localhost:" + port + TestUtils.contextpath + endpoint + "/" + POSTresponse.getBody().getId(),
                 HttpMethod.DELETE,
                 DELETERequestEntity,
                 Void.class
@@ -214,24 +207,16 @@ public class RestaurantResourceTests {
     @Test
     public void deleteRestaurantWithInValidIdShouldReturnNotFound() {
 
-        HttpHeaders requestHeaders = setHeaders();
+        HttpHeaders requestHeaders = TestUtils.setHeaders();
         HttpEntity<RestaurantDTO> DELETERequestEntity = new HttpEntity<>(requestHeaders);
 
         ResponseEntity<Void> DELETEresponse = restTemplate.exchange(
-                "http://localhost:" + port + contextpath + endpoint + "/" + "9999",
+                "http://localhost:" + port + TestUtils.contextpath + endpoint + "/" + "9999",
                 HttpMethod.DELETE,
                 DELETERequestEntity,
                 Void.class
         );
         assertThat(DELETEresponse.getStatusCode(), equalTo(HttpStatus.NOT_FOUND));
-    }
-
-
-    private HttpHeaders setHeaders() {
-        HttpHeaders requestHeaders = new HttpHeaders();
-        requestHeaders.setContentType(MediaType.APPLICATION_JSON);
-        requestHeaders.setBearerAuth(token);
-        return requestHeaders;
     }
 
 }
