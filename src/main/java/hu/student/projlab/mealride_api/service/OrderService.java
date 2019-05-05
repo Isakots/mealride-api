@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -77,4 +78,13 @@ public class OrderService {
     }
 
 
+    public List<OrderDetails> findUserOrders() {
+        // TODO write an SQL query for this
+        return Collections.emptyList();
+    }
+
+    public List<OrderDetails> findRestaurantOrders() {
+        // TODO write an SQL query for this
+        return Collections.emptyList();
+    }
 }

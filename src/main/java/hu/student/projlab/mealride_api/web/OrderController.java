@@ -7,15 +7,15 @@ import hu.student.projlab.mealride_api.util.EndpointConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
-@RequestMapping(EndpointConstants.ORDER_ENDPOINT)
 class OrderController {
 
     private OrderService orderService;
@@ -26,11 +26,23 @@ class OrderController {
     }
 
     @PreAuthorize("hasRole('ROLE_USER')")
-    @PostMapping
+    @PostMapping(EndpointConstants.ORDER_ENDPOINT)
     public ResponseEntity<OrderDetails> processOrder(
             @RequestBody @Valid OrderDetails orderDetails) throws OrderException {
         OrderDetails details = orderService.processOrder(orderDetails);
         return ResponseEntity.ok(details);
+    }
+
+    @GetMapping(EndpointConstants.USER_ENDPOINT + EndpointConstants.PREVIOUS_ORDERS_ENDPOINT)
+    public ResponseEntity<List<OrderDetails>> findUserPreviousOrders() {
+        List<OrderDetails> previousOrders = orderService.findUserOrders();
+        return ResponseEntity.ok(previousOrders);
+    }
+
+    @GetMapping(EndpointConstants.RESTAURANT_ENDPOINT + EndpointConstants.PREVIOUS_ORDERS_ENDPOINT)
+    public ResponseEntity<List<OrderDetails>> findRestaurantPreviousOrders() {
+        List<OrderDetails> previousOrders = orderService.findRestaurantOrders();
+        return ResponseEntity.ok(previousOrders);
     }
 
 }

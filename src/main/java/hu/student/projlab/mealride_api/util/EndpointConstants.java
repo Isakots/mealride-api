@@ -14,6 +14,7 @@ public final class EndpointConstants {
     public static final String RESTAURANT_ENDPOINT = "/restaurant";
     public static final String ADMIN_ENDPOINT = "/admin";
     public static final String ORDER_ENDPOINT = "/order";
+    public static final String PREVIOUS_ORDERS_ENDPOINT = "/previous-orders";
 
     private EndpointConstants() {}
 
