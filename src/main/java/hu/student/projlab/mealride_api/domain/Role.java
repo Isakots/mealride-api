@@ -3,10 +3,11 @@ package hu.student.projlab.mealride_api.domain;
 import org.springframework.security.core.GrantedAuthority;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Objects;
 
 @Entity
-public class Role implements GrantedAuthority {
+public class Role implements GrantedAuthority, Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

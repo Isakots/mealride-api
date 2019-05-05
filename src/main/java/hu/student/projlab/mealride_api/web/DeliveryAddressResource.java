@@ -19,7 +19,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping(value = EndpointConstants.USER_ENDPOINT + EndpointConstants.ADDRESS_RESOURCE)
-class DeliveryAddressResource {
+public class DeliveryAddressResource {
 
     private DeliveryAddressService deliveryAddressService;
 

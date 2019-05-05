@@ -82,17 +82,18 @@ public class AddressResourceTests {
                 .andExpect(jsonPath("message", equalTo("DTO must not contain ID.")));
 
     }
-/*
-    @Test
-    @WithMockUser(username = username)
-    public void putUserAddressWithoutIdShouldReturnNotFound() throws Exception {
 
-        mockMvc.perform(put(urlTemplate)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(new Gson().toJson(mockAddressUpdated)))
-                .andExpect(status().isNotFound());
-    }
+    /*
+        @Test
+        @WithMockUser(username = username)
+        public void putUserAddressWithoutIdShouldReturnNotFound() throws Exception {
 
+            mockMvc.perform(put(urlTemplate)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(new Gson().toJson(mockAddressUpdated)))
+                    .andExpect(status().isNotFound());
+        }
+    */
     @Test
     @WithMockUser(username = username)
     public void putUserAddressWithIdShouldBeUpdated() throws Exception {
@@ -111,7 +112,7 @@ public class AddressResourceTests {
                 .andExpect(jsonPath("state", equalTo("MockStateUpdated")))
                 .andExpect(jsonPath("housenumber", equalTo((short) 1)));
     }
-*/
+
 
     @Test
     @WithMockUser(username = username)
@@ -125,7 +126,7 @@ public class AddressResourceTests {
     }
 
 
-   /* @Test
+    @Test
     @WithMockUser(username = username)
     public void deleteUserAddressWithInvalidIdShouldThrowException() throws Exception {
 
@@ -135,7 +136,7 @@ public class AddressResourceTests {
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound());
         //.andExpect(jsonPath("message", equalTo("Elements not found.")));
-    }*/
+    }
 
 
     private void postData() throws Exception {
