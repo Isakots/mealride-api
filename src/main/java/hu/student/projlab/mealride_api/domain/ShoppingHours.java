@@ -1,9 +1,14 @@
 package hu.student.projlab.mealride_api.domain;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import java.sql.Time;
 
+@Getter
+@Setter
 @Embeddable
 public class ShoppingHours {
 
@@ -17,22 +22,6 @@ public class ShoppingHours {
 
     public ShoppingHours(Time open, Time close) {
         this.open = open;
-        this.close = close;
-    }
-
-    public Time getOpen() {
-        return open;
-    }
-
-    public void setOpen(Time open) {
-        this.open = open;
-    }
-
-    public Time getClose() {
-        return close;
-    }
-
-    public void setClose(Time close) {
         this.close = close;
     }
 }

@@ -1,11 +1,15 @@
 package hu.student.projlab.mealride_api.domain;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Objects;
 
+@Getter
+@Setter
 @Entity
 public class Role implements GrantedAuthority, Serializable {
 
@@ -19,6 +23,10 @@ public class Role implements GrantedAuthority, Serializable {
     public Role() {
     }
 
+    public Role(String role) {
+        this.role = role;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -30,26 +38,6 @@ public class Role implements GrantedAuthority, Serializable {
     @Override
     public int hashCode() {
         return Objects.hash(role);
-    }
-
-    public Role(String role) {
-        this.role = role;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getRole() {
-        return role;
-    }
-
-    public void setRole(String role) {
-        this.role = role;
     }
 
     @Override

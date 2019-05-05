@@ -1,10 +1,14 @@
 package hu.student.projlab.mealride_api.service.dto;
 
 import hu.student.projlab.mealride_api.service.validation.password.Password;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.validation.constraints.Email;
 import java.io.Serializable;
 
+@Getter
+@Setter
 public class UserDTO implements Serializable {
 
     @Email
@@ -17,22 +21,6 @@ public class UserDTO implements Serializable {
 
     public UserDTO(@Email String username, String password) {
         this.username = username;
-        this.password = password;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
         this.password = password;
     }
 }

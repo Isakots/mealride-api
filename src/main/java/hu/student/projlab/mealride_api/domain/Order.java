@@ -4,11 +4,15 @@ package hu.student.projlab.mealride_api.domain;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import hu.student.projlab.mealride_api.domain.converter.LocalDateTimeAttributeConverter;
 import hu.student.projlab.mealride_api.domain.user.CustomerUser;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.List;
 
+@Getter
+@Setter
 @Entity
 @Table(name = "ORDERS")
 public class Order {
@@ -54,105 +58,6 @@ public class Order {
     @Column(name = "WORKER_COMMENT")
     private String restaurantcomment;
     @Column(name = "STATUS")
-    private Status status;  // enum type State
+    private Status status;
 
-
-    public Order() {
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public CustomerUser getCustomer() {
-        return customer;
-    }
-
-    public void setCustomer(CustomerUser customer) {
-        this.customer = customer;
-    }
-
-    public Restaurant getRestaurant() {
-        return restaurant;
-    }
-
-    public void setRestaurant(Restaurant restaurant) {
-        this.restaurant = restaurant;
-    }
-
-    public List<CartItem> getMeals() {
-        return meals;
-    }
-
-    public void setMeals(List<CartItem> meals) {
-        this.meals = meals;
-    }
-
-    public DeliveryAddress getAddress() {
-        return address;
-    }
-
-    public void setAddress(DeliveryAddress address) {
-        this.address = address;
-    }
-
-    public CreditCard getCard() {
-        return card;
-    }
-
-    public void setCard(CreditCard card) {
-        this.card = card;
-    }
-
-    public int getPrice() {
-        return price;
-    }
-
-    public void setPrice(int price) {
-        this.price = price;
-    }
-
-    public LocalDateTime getOrdertime() {
-        return ordertime;
-    }
-
-    public void setOrdertime(LocalDateTime ordertime) {
-        this.ordertime = ordertime;
-    }
-
-    public String getCouriername() {
-        return couriername;
-    }
-
-    public void setCouriername(String couriername) {
-        this.couriername = couriername;
-    }
-
-    public String getUsercomment() {
-        return usercomment;
-    }
-
-    public void setUsercomment(String usercomment) {
-        this.usercomment = usercomment;
-    }
-
-    public String getRestaurantcomment() {
-        return restaurantcomment;
-    }
-
-    public void setRestaurantcomment(String restaurantcomment) {
-        this.restaurantcomment = restaurantcomment;
-    }
-
-    public Status getStatus() {
-        return status;
-    }
-
-    public void setStatus(Status status) {
-        this.status = status;
-    }
 }

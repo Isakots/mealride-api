@@ -1,10 +1,14 @@
 package hu.student.projlab.mealride_api.service.dto;
 
 import hu.student.projlab.mealride_api.domain.CreditCard;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.validation.constraints.Pattern;
 import java.io.Serializable;
 
+@Getter
+@Setter
 public class CreditCardDTO implements Serializable {
 
     private Long id;
@@ -36,51 +40,4 @@ public class CreditCardDTO implements Serializable {
         this.expriationyear = card.getExpriationdate().getYear();
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getNumber() {
-        return number;
-    }
-
-    public void setNumber(String number) {
-        this.number = number;
-    }
-
-    public String getOwnername() {
-        return ownername;
-    }
-
-    public void setOwnername(String ownername) {
-        this.ownername = ownername;
-    }
-
-    public int getExpriationmonth() {
-        return expriationmonth;
-    }
-
-    public void setExpriationmonth(int expriationmonth) {
-        this.expriationmonth = expriationmonth;
-    }
-
-    public int getExpriationyear() {
-        return expriationyear;
-    }
-
-    public void setExpriationyear(int expriationyear) {
-        this.expriationyear = expriationyear;
-    }
-
-    public String getCvc() {
-        return cvc;
-    }
-
-    public void setCvc(String cvc) {
-        this.cvc = cvc;
-    }
 }

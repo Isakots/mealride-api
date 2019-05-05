@@ -2,6 +2,8 @@ package hu.student.projlab.mealride_api.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import hu.student.projlab.mealride_api.domain.user.CustomerUser;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.*;
 import javax.validation.constraints.Max;
@@ -11,6 +13,8 @@ import java.util.Objects;
 
 import static java.util.Objects.hash;
 
+@Getter
+@Setter
 @Entity
 @Table(name="ADDRESS")
 public class DeliveryAddress extends AbstractEntity{
@@ -64,78 +68,6 @@ public class DeliveryAddress extends AbstractEntity{
         this.housenumber = housenumber;
         this.floor = floor;
         this.door = door;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getZipcode() {
-        return zipcode;
-    }
-
-    public void setZipcode(String zipcode) {
-        this.zipcode = zipcode;
-    }
-
-    public String getCity() {
-        return city;
-    }
-
-    public void setCity(String city) {
-        this.city = city;
-    }
-
-    public String getStreet() {
-        return street;
-    }
-
-    public void setStreet(String street) {
-        this.street = street;
-    }
-
-    public String getState() {
-        return state;
-    }
-
-    public void setState(String state) {
-        this.state = state;
-    }
-
-    public Short getHousenumber() {
-        return housenumber;
-    }
-
-    public void setHousenumber(Short housenumber) {
-        this.housenumber = housenumber;
-    }
-
-    public Short getFloor() {
-        return floor;
-    }
-
-    public void setFloor(Short floor) {
-        this.floor = floor;
-    }
-
-    public Short getDoor() {
-        return door;
-    }
-
-    public void setDoor(Short door) {
-        this.door = door;
-    }
-
-    public CustomerUser getCustomer() {
-        return customer;
-    }
-
-    public void setCustomer(CustomerUser customer) {
-        this.customer = customer;
     }
 
     @Override

@@ -2,11 +2,15 @@ package hu.student.projlab.mealride_api.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import hu.student.projlab.mealride_api.domain.user.RestaurantUser;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.List;
 
 
+@Getter
+@Setter
 @Entity
 public class Restaurant extends AbstractEntity {
 
@@ -46,7 +50,6 @@ public class Restaurant extends AbstractEntity {
             inverseJoinColumns = {@JoinColumn(name = "ORDER_ID")})
     private List<Order> orders;
 
-
     public Restaurant() {
     }
 
@@ -57,78 +60,6 @@ public class Restaurant extends AbstractEntity {
         this.minorderprice = minorderprice;
         this.deliveryprice = deliveryprice;
         this.hours = hours;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getAvgdeliverytime() {
-        return avgdeliverytime;
-    }
-
-    public void setAvgdeliverytime(String avgdeliverytime) {
-        this.avgdeliverytime = avgdeliverytime;
-    }
-
-    public Short getMinorderprice() {
-        return minorderprice;
-    }
-
-    public void setMinorderprice(Short minorderprice) {
-        this.minorderprice = minorderprice;
-    }
-
-    public Short getDeliveryprice() {
-        return deliveryprice;
-    }
-
-    public void setDeliveryprice(Short deliveryprice) {
-        this.deliveryprice = deliveryprice;
-    }
-
-    public ShoppingHours getHours() {
-        return hours;
-    }
-
-    public void setHours(ShoppingHours hours) {
-        this.hours = hours;
-    }
-
-    public List<Meal> getMenu() {
-        return menu;
-    }
-
-    public void setMenu(List<Meal> menu) {
-        this.menu = menu;
-    }
-
-    public List<RestaurantUser> getWorkers() {
-        return workers;
-    }
-
-    public void setWorkers(List<RestaurantUser> workers) {
-        this.workers = workers;
-    }
-
-    public List<Order> getOrders() {
-        return orders;
-    }
-
-    public void setOrders(List<Order> orders) {
-        this.orders = orders;
     }
 
     public void printmenu() {

@@ -1,11 +1,16 @@
 package hu.student.projlab.mealride_api.domain;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.Objects;
 
+@Getter
+@Setter
 @Entity
 public class Meal extends AbstractEntity implements Serializable {
 
@@ -40,38 +45,6 @@ public class Meal extends AbstractEntity implements Serializable {
                 Objects.equals(id, meal.id) &&
                 Objects.equals(name, meal.name) &&
                 Objects.equals(comment, meal.comment);
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public int getPrice() {
-        return price;
-    }
-
-    public void setPrice(int price) {
-        this.price = price;
-    }
-
-    public String getComment() {
-        return comment;
-    }
-
-    public void setComment(String comment) {
-        this.comment = comment;
     }
 
     @Override
