@@ -20,9 +20,9 @@ My goals in this project were:
 
 Further goals:
 - Change the embedded Tomcat server
-- Get to know with Docker and run the application inside a container
+- Get to know Docker and run the application inside a container
 - Configuring Spring profiles: different profiles for testing and development
 - Evolving the REST API with HATEOAS (not necessarily this one)
 - Integrating some third-party service
 - Using WebFlux
-- Get to know some more advanced JPA configuration features
+- Get to know some more, advanced JPA configuration features
