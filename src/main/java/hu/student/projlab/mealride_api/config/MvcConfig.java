@@ -19,7 +19,8 @@ public class MvcConfig implements WebMvcConfigurer {
     @Value("${spring.datasource.url}")
     private String url;
 
-    private final String driver = "com.mysql.cj.jdbc.Driver";
+    @Value("${mydatasource.driver}")
+    private String driver;
 
     @Bean(name = "dataSource")
     public DriverManagerDataSource dataSource() {

@@ -17,3 +17,12 @@ My goals in this project were:
 - Get to know the JWT token authentication
 - Being aware of security issues
 - Using the Java8 features a lot
+
+Further goals:
+- Change the embedded Tomcat server
+- Get to know with Docker and run the application inside a container
+- Configuring Spring profiles: different profiles for testing and development
+- Evolving the REST API with HATEOAS (not necessarily this one)
+- Integrating some third-party service
+- Using WebFlux
+- Get to know some more advanced JPA configuration features
