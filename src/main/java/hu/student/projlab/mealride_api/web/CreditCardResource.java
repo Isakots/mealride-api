@@ -5,8 +5,13 @@ import hu.student.projlab.mealride_api.service.CreditCardService;
 import hu.student.projlab.mealride_api.service.dto.CreditCardDTO;
 import hu.student.projlab.mealride_api.util.EndpointConstants;
 import hu.student.projlab.mealride_api.util.HeaderUtil;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,6 +33,18 @@ class CreditCardResource {
     }
 
     @GetMapping
+    @ApiOperation(value = "Find authenticated user's registered credit cards",
+            response = CreditCardDTO.class,
+            responseContainer = "List",
+            consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Credit cards are returned"),
+            @ApiResponse(code = 400, message = "Bad request"),
+            @ApiResponse(code = 401, message = "User is not authenticated"),
+            @ApiResponse(code = 403, message = "Invalid operation"),
+            @ApiResponse(code = 404, message = "Credit Card not found.")}
+    )
     public ResponseEntity<List<CreditCardDTO>> getCards() {
         List<CreditCardDTO> result = creditCardService.findAll();
         return new ResponseEntity<>(
@@ -35,7 +52,17 @@ class CreditCardResource {
     }
 
     @PostMapping
+    @ApiOperation(value = "Register a new credit card to authenticated user",
+            response = CreditCardDTO.class,
+            consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Credit card is saved"),
+            @ApiResponse(code = 400, message = "Invalid ID supplied"),
+            @ApiResponse(code = 401, message = "User is not authenticated")}
+    )
     public ResponseEntity<CreditCardDTO> addCard(
+            @ApiParam(value = "Credit card what should be registered", required = true)
             @RequestBody @Valid CreditCardDTO creditCard) throws URISyntaxException, InvalidDataException {
 
         if (creditCard.getId() != null)
@@ -49,7 +76,19 @@ class CreditCardResource {
     }
 
     @PutMapping
+    @ApiOperation(value = "Update a credit card to authenticated user",
+            response = CreditCardDTO.class,
+            consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Credit card is updated"),
+            @ApiResponse(code = 400, message = "ID is not supplied"),
+            @ApiResponse(code = 401, message = "User is not authenticated"),
+            @ApiResponse(code = 403, message = "Invalid operation"),
+            @ApiResponse(code = 404, message = "Credit Card not found.")}
+    )
     public ResponseEntity<CreditCardDTO> updateCard(
+            @ApiParam(value = "Credit card what should be updated", required = true)
             @RequestBody @Valid CreditCardDTO creditCard) {
 
         if (creditCard.getId() == null)
@@ -66,7 +105,17 @@ class CreditCardResource {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteCard(@PathVariable Long id) {
+    @ApiOperation(value = "Delete a credit card from authenticated user")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Credit Card is deleted"),
+            @ApiResponse(code = 400, message = "Invalid ID supplied"),
+            @ApiResponse(code = 401, message = "User is not authenticated"),
+            @ApiResponse(code = 403, message = "Invalid operation"),
+            @ApiResponse(code = 404, message = "Credit Card not found.")}
+    )
+    public ResponseEntity<Void> deleteCard(
+            @ApiParam(value = "Credit card's ID what should be deleted", required = true)
+            @PathVariable Long id) {
         creditCardService.deleteCard(id);
         return ResponseEntity
                 .ok()
