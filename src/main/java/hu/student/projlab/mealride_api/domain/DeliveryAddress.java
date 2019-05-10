@@ -2,6 +2,8 @@ package hu.student.projlab.mealride_api.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import hu.student.projlab.mealride_api.domain.user.CustomerUser;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -17,38 +19,47 @@ import static java.util.Objects.hash;
 @Setter
 @Entity
 @Table(name="ADDRESS")
+@ApiModel(value = "Address Model", description = "Use this model to send data")
 public class DeliveryAddress extends AbstractEntity{
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @ApiModelProperty(value = "ID of the address", allowEmptyValue = true)
     private Long id;
 
     @Pattern(regexp="[0-9]{4}", message="ZipCode format is not correct!")
     @Column(name="ZIP")
+    @ApiModelProperty(value = "Zip Code")
     private String zipcode;
 
     @Size(max=31, message="Length must be less than 32!")
     @Column(name="CITY")
+    @ApiModelProperty(value = "City")
     private String city;
 
     @Size(max=63, message="Length must be less than 64!")
     @Column(name="STREET")
+    @ApiModelProperty(value = "Street")
     private String street;
 
     @Size(max=31, message="Length must be less than 32!")
     @Column(name="STATE")
+    @ApiModelProperty(value = "State")
     private String state;
 
     @Max(value=999, message="House number has to be less than 999!")
     @Column(name="HOUSE_NUMBER")
+    @ApiModelProperty(value = "House Number")
     private Short housenumber;
 
     @Max(value=100, message="Floor number has to be less than 100")
     @Column(name="FLOOR")
+    @ApiModelProperty(value = "Floor")
     private Short floor;
 
     @Max(value=9999, message="Door number has to be less than 9999")
     @Column(name="DOOR")
+    @ApiModelProperty(value = "Door")
     private Short door;
 
 

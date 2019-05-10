@@ -7,6 +7,10 @@ import hu.student.projlab.mealride_api.exception.UserNotFoundException;
 import hu.student.projlab.mealride_api.service.WorkerService;
 import hu.student.projlab.mealride_api.service.dto.WorkerDTO;
 import hu.student.projlab.mealride_api.util.EndpointConstants;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,6 +32,16 @@ class WorkerResource {
     }
 
     @GetMapping(EndpointConstants.WORKER_RESOURCE)
+    @ApiOperation(value = "Find all workers of a Restaurant",
+            response = WorkerDTO.class,
+            responseContainer = "List")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Workers are returned"),
+            @ApiResponse(code = 400, message = "Bad request"),
+            @ApiResponse(code = 401, message = "User is not authenticated"),
+            @ApiResponse(code = 403, message = "Invalid operation"),
+            @ApiResponse(code = 404, message = "Worker not found.")}
+    )
     public ResponseEntity<List<WorkerDTO>> getWorkers(@RequestParam Long id) throws InvalidDataException {
         List<WorkerDTO> result = workerService.findAll(id);
         return new ResponseEntity<>(
@@ -35,19 +49,49 @@ class WorkerResource {
     }
 
     @PostMapping(EndpointConstants.WORKER_RESOURCE)
-    public ResponseEntity<WorkerDTO> addWorker(@RequestBody String workerEmail) throws UserNotFoundException, AlreadyAddedToRestaurantException {
+    @ApiOperation(value = "Register a new worker into Restaurant",
+            response = WorkerDTO.class)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Worker is added to Restaurant"),
+            @ApiResponse(code = 400, message = "Invalid ID supplied"),
+            @ApiResponse(code = 401, message = "User is not authenticated")}
+    )
+    public ResponseEntity<WorkerDTO> addWorker(
+            @ApiParam(value = "Worker data that should be added to Restaurant", required = true)
+            @RequestBody String workerEmail) throws UserNotFoundException, AlreadyAddedToRestaurantException {
         WorkerDTO worker = workerService.addWorker(workerEmail);
         return ResponseEntity.ok(worker);
     }
 
     @PutMapping(EndpointConstants.WORKER_RESOURCE)
-    public ResponseEntity<WorkerDTO> updateWorker(@RequestBody WorkerDTO workerDTO) throws UserNotFoundException {
+    @ApiOperation(value = "Update worker in the Restaurant",
+            response = WorkerDTO.class)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Worker is updated"),
+            @ApiResponse(code = 400, message = "ID is not supplied"),
+            @ApiResponse(code = 401, message = "User is not authenticated"),
+            @ApiResponse(code = 403, message = "Invalid operation"),
+            @ApiResponse(code = 404, message = "Worker not found")}
+    )
+    public ResponseEntity<WorkerDTO> updateWorker(
+            @ApiParam(value = "Worker data that should be updated in Restaurant", required = true)
+            @RequestBody WorkerDTO workerDTO) throws UserNotFoundException {
         WorkerDTO worker = workerService.updateWorkerRoles(workerDTO);
         return ResponseEntity.ok(worker);
     }
 
     @DeleteMapping(EndpointConstants.WORKER_RESOURCE)
-    public ResponseEntity<String> deleteWorker(@RequestBody String workerEmail) throws UserNotFoundException {
+    @ApiOperation(value = "Remove worker from Restaurant")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Worker is removed"),
+            @ApiResponse(code = 400, message = "Invalid ID supplied"),
+            @ApiResponse(code = 401, message = "User is not authenticated"),
+            @ApiResponse(code = 403, message = "Invalid operation"),
+            @ApiResponse(code = 404, message = "Worker not found")}
+    )
+    public ResponseEntity<String> deleteWorker(
+            @ApiParam(value = "ID of worker that should be removed from Restaurant", required = true)
+            @RequestBody String workerEmail) throws UserNotFoundException {
         workerService.deleteWorker(workerEmail);
         return ResponseEntity.ok("Worker is deleted successfully");
     }
