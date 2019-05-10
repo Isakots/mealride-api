@@ -6,6 +6,8 @@ import org.springframework.security.core.GrantedAuthority;
 
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Getter
 @Setter
@@ -13,11 +15,15 @@ public class JwtResponse implements Serializable {
   private String accessToken;
   private String type = "Bearer";
   private String username;
-  private Collection<? extends GrantedAuthority> authorities;
+  private List<String> authorities;
  
   public JwtResponse(String accessToken, String username, Collection<? extends GrantedAuthority> authorities) {
     this.accessToken = accessToken;
     this.username = username;
-    this.authorities = authorities;
+
+    // This is necessary because the MockMvc test cannot serialize the GrantedAuthority type.
+    this.authorities = authorities.stream()
+            .map(authority -> (authority).getAuthority())
+            .collect(Collectors.toList());
   }
 }

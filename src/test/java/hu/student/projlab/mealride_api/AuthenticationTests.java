@@ -50,9 +50,10 @@ public class AuthenticationTests {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(new Gson().toJson(this.userWithAllCredentials)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("tokenType", equalTo("Bearer")))
+                .andExpect(jsonPath("type", equalTo("Bearer")))
                 .andExpect(jsonPath("accessToken", notNullValue()))
-                .andExpect(jsonPath(("username"), equalTo("example@mealride.com")));
+                .andExpect(jsonPath(("username"), equalTo("example@mealride.com")))
+                .andExpect(jsonPath(("authorities"), notNullValue()));
     }
 
     @Test
