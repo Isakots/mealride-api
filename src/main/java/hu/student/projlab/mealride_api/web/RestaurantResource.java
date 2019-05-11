@@ -25,6 +25,7 @@ import java.net.URISyntaxException;
 import java.util.List;
 
 @RestController
+@CrossOrigin(origins = {"http://localhost:4200", "http://localhost:8080"})
 @PreAuthorize("hasRole('ROLE_ADMIN')")
 @RequestMapping(value = EndpointConstants.ADMIN_ENDPOINT + EndpointConstants.RESTAURANT_RESOURCE)
 class RestaurantResource {
