@@ -57,7 +57,15 @@ public class DeliveryAddressService {
      */
     public DeliveryAddress updateAddress(DeliveryAddress address) {
         checkIfUserHasSpecifiedAddress(address);
-        return deliveryAddressRepository.save(address);
+        DeliveryAddress oldAddress = deliveryAddressRepository.findById(address.getId()).get();
+        oldAddress.setZipcode(address.getZipcode());
+        oldAddress.setState(address.getState());
+        oldAddress.setCity(address.getCity());
+        oldAddress.setStreet(address.getStreet());
+        oldAddress.setHousenumber(address.getHousenumber());
+        oldAddress.setFloor(address.getFloor());
+        oldAddress.setDoor(address.getDoor());
+        return deliveryAddressRepository.save(oldAddress);
     }
 
     /**

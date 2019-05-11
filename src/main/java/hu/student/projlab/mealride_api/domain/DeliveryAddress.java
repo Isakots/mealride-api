@@ -9,6 +9,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import javax.validation.constraints.Max;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.util.Objects;
@@ -28,26 +29,31 @@ public class DeliveryAddress extends AbstractEntity{
     private Long id;
 
     @Pattern(regexp="[0-9]{4}", message="ZipCode format is not correct!")
+    @NotNull
     @Column(name="ZIP")
     @ApiModelProperty(value = "Zip Code")
     private String zipcode;
 
     @Size(max=31, message="Length must be less than 32!")
+    @NotNull
     @Column(name="CITY")
     @ApiModelProperty(value = "City")
     private String city;
 
     @Size(max=63, message="Length must be less than 64!")
+    @NotNull
     @Column(name="STREET")
     @ApiModelProperty(value = "Street")
     private String street;
 
     @Size(max=31, message="Length must be less than 32!")
+    @NotNull
     @Column(name="STATE")
     @ApiModelProperty(value = "State")
     private String state;
 
     @Max(value=999, message="House number has to be less than 999!")
+    @NotNull
     @Column(name="HOUSE_NUMBER")
     @ApiModelProperty(value = "House Number")
     private Short housenumber;
