@@ -13,8 +13,6 @@ import java.util.NoSuchElementException;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    // TODO maybe the exceptions should be refactored as RuntimeExceptions? find out!
-
     @ExceptionHandler(NoSuchElementException.class)
     protected ResponseEntity<?> handleElementNotFound() {
         return new ResponseEntity<>(wrapMessageToJSON("Elements not found."), null, HttpStatus.NOT_FOUND);

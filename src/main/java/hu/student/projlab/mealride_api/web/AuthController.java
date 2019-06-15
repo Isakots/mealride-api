@@ -75,7 +75,7 @@ public class AuthController {
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
 
         return ResponseEntity.ok(new JwtResponse(jwt, userDetails.getUsername(),
-                userDetails.getAuthorities()));
+                null));
     }
 
     @PostMapping("/signup")

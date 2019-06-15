@@ -5,9 +5,9 @@ import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Getter
 @Setter
@@ -22,8 +22,9 @@ public class JwtResponse implements Serializable {
     this.username = username;
 
     // This is necessary because the MockMvc test cannot serialize the GrantedAuthority type.
-    this.authorities = authorities.stream()
-            .map(authority -> (authority).getAuthority())
-            .collect(Collectors.toList());
+//    this.authorities = authorities.stream()
+//            .map(authority -> (authority).getAuthority())
+//            .collect(Collectors.toList());
+      this.authorities = new ArrayList<>();
   }
 }
